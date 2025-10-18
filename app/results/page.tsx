@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
 import { ArrowRight, BookOpen, Video, Smartphone } from 'lucide-react';
 import { generateBlueprint } from '@/lib/decisionTree';
 
@@ -48,7 +47,6 @@ export default function ResultsPage() {
   const [loading, setLoading] = useState(true);
   const [email, setEmail] = useState('');
   const [emailSubmitted, setEmailSubmitted] = useState(false);
-  const searchParams = useSearchParams();
 
   useEffect(() => {
     const fetchAssessment = async () => {
