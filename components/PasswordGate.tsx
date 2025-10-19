@@ -11,6 +11,12 @@ export default function PasswordGate({ children }: { children: React.ReactNode }
   const [error, setError] = useState('');
 
   useEffect(() => {
+    // Skip password on localhost for development
+    if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
+      setIsAuthenticated(true);
+      return;
+    }
+    
     // Check if user is already authenticated (stored in sessionStorage)
     const auth = sessionStorage.getItem('evzain_auth');
     if (auth === 'true') {

@@ -33,7 +33,7 @@ export default function Home() {
               EVZA<span className="logo-in">IN</span>
             </h1>
             <div className="text-right text-sm text-emerald-300">
-              Your AI Performance Partner
+              Your Performance Partner
             </div>
           </div>
           <h2 className="text-2xl md:text-3xl font-light max-w-3xl">
