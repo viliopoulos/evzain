@@ -1,0 +1,226 @@
+import { tennisDecisionTree } from './sports/tennis';
+import { basketballDecisionTree } from './sports/basketball';
+import { soccerDecisionTree } from './sports/soccer';
+import { fitnessDecisionTree } from './sports/fitness';
+import { weightTrainingDecisionTree } from './sports/weightTraining';
+
+interface AssessmentData {
+  sport: string;
+  level: string;
+  trainingHours: string;
+  goals: string;
+  frustrations: string[];
+  confusionFrequency: string;
+  trackingMethod: string[];
+  compete: string;
+  mentalChallenges: string[];
+  mentalStrategies: string[];
+  adviceSources: string[];
+  willingnessToPay: string;
+}
+
+interface TrainingRecommendation {
+  focus: string[];
+  drills: string[];
+  frequency: string;
+  notes?: string;
+}
+
+interface Blueprint {
+  hero: {
+    title: string;
+    subtitle: string;
+    goal: string;
+  };
+  currentState: {
+    level: string;
+    trainingHours: string;
+    challenges: string[];
+    mentalChallenges: string[];
+  };
+  recommendations: {
+    technical: TrainingRecommendation;
+    tactical: TrainingRecommendation;
+    mental: TrainingRecommendation;
+    physical: TrainingRecommendation;
+  };
+  progressionPath: {
+    current: string;
+    nextMilestone: string;
+    timeline: string;
+    keyFocusAreas: string[];
+  };
+  resources: {
+    books: string[];
+    videos: string[];
+    apps: string[];
+  };
+}
+
+// Sport decision tree mapping
+const SPORT_TREES: Record<string, any> = {
+  'tennis': tennisDecisionTree,
+  'basketball': basketballDecisionTree,
+  'soccer': soccerDecisionTree,
+  'fitness': fitnessDecisionTree,
+  'weight_training': weightTrainingDecisionTree,
+  'weights': weightTrainingDecisionTree,
+};
+
+// Helper to get decision tree for sport
+function getDecisionTree(sport: string) {
+  const normalizedSport = sport.toLowerCase().replace(/\s+/g, '_');
+  return SPORT_TREES[normalizedSport] || fitnessDecisionTree;
+}
+
+export function generateBlueprint(data: AssessmentData): Blueprint {
+  // Base blueprint structure
+  const blueprint: Blueprint = {
+    hero: {
+      title: `Your ${data.sport} Performance Blueprint`,
+      subtitle: `Level: ${data.level} | Training: ${data.trainingHours}/week`,
+      goal: data.goals,
+    },
+    currentState: {
+      level: data.level,
+      trainingHours: data.trainingHours,
+      challenges: data.frustrations,
+      mentalChallenges: data.mentalChallenges,
+    },
+    recommendations: {
+      technical: getTechnicalRecommendations(data),
+      tactical: getTacticalRecommendations(data),
+      mental: getMentalRecommendations(data),
+      physical: getPhysicalRecommendations(data),
+    },
+    progressionPath: getProgressionPath(data),
+    resources: getRecommendedResources(data),
+  };
+
+  return blueprint;
+}
+
+function getTechnicalRecommendations(data: AssessmentData): TrainingRecommendation {
+  const isTennis = data.sport.toLowerCase() === 'tennis';
+  
+  if (isTennis) {
+    const baseRecommendation: TrainingRecommendation = {
+      focus: [],
+      drills: [],
+      frequency: '3x per week',
+    };
+
+    // Level-based recommendations
+    if (data.level.toLowerCase().includes('beginner')) {
+      baseRecommendation.focus = ['Basic stroke mechanics', 'Grip and stance', 'Ball tracking'];
+      baseRecommendation.drills = [
+        'Forehand and backhand wall rallies',
+        'Mini-tennis cross-court exchanges',
+        'Underhand serve practice'
+      ];
+    } else if (data.level.toLowerCase().includes('recreational')) {
+      baseRecommendation.focus = ['Consistency', 'Basic spin', 'Footwork'];
+      baseRecommendation.drills = [
+        'Cross-court forehand rallies (10+ shots)',
+        'Serve and return patterns',
+        'Approach and volley sequences'
+      ];
+      baseRecommendation.frequency = '3-4x per week';
+    } else if (data.level.toLowerCase().includes('high school') || 
+               data.level.toLowerCase().includes('college')) {
+      baseRecommendation.focus = ['Shot placement', 'Spin variation', 'Serve consistency'];
+      baseRecommendation.drills = [
+        'Target serving (20 serves to each corner)',
+        'Cross-court/down-the-line patterns',
+        'Approach and finish at net'
+      ];
+      baseRecommendation.frequency = '4-5x per week';
+    } else {
+      // Professional/Advanced
+      baseRecommendation.focus = ['Shot tolerance', 'Variety', 'Match-specific patterns'];
+      baseRecommendation.drills = [
+        'Serve +1 patterns',
+        'Defensive to offensive transitions',
+        'Point construction drills'
+      ];
+      baseRecommendation.frequency = '5-6x per week';
+    }
+
+    // Add goal-specific drills
+    if (data.goals.includes('compete')) {
+      baseRecommendation.drills.push('Match simulation (sets/tiebreaks)');
+      baseRecommendation.drills.push('Pressure point scenarios');
+    }
+
+    // Add frustration-specific recommendations
+    if (data.frustrations.includes('inconsistent')) {
+      baseRecommendation.focus.push('Consistency in stroke production');
+      baseRecommendation.drills.push('Cross-court consistency (20+ shot rallies)');
+    }
+
+    return baseRecommendation;
+  }
+
+  // Default for other sports
+  return {
+    focus: ['Fundamental techniques', 'Consistency', 'Form'],
+    drills: ['Drill 1', 'Drill 2', 'Drill 3'],
+    frequency: '2-3x per week',
+  };
+}
+
+function getTacticalRecommendations(data: AssessmentData): TrainingRecommendation {
+  // Similar structure to getTechnicalRecommendations
+  // Implementation for tactical recommendations
+  return {
+    focus: ['Match strategy', 'Point construction', 'Opponent analysis'],
+    drills: ['Pattern play', 'Situational games', 'Match simulation'],
+    frequency: '2x per week',
+  };
+}
+
+function getMentalRecommendations(data: AssessmentData): TrainingRecommendation {
+  // Implementation for mental game recommendations
+  return {
+    focus: ['Focus', 'Emotional control', 'Confidence building'],
+    drills: ['Visualization', 'Breathing exercises', 'Pre-point routines'],
+    frequency: 'Daily',
+  };
+}
+
+function getPhysicalRecommendations(data: AssessmentData): TrainingRecommendation {
+  // Implementation for physical training recommendations
+  return {
+    focus: ['Agility', 'Endurance', 'Strength'],
+    drills: ['Footwork drills', 'Interval training', 'Core exercises'],
+    frequency: '2-3x per week',
+  };
+}
+
+function getProgressionPath(data: AssessmentData) {
+  // Implementation for progression path
+  return {
+    current: data.level,
+    nextMilestone: 'Next Level',
+    timeline: '3-6 months',
+    keyFocusAreas: ['Technical', 'Tactical', 'Physical', 'Mental'],
+  };
+}
+
+function getRecommendedResources(data: AssessmentData) {
+  // Implementation for recommended resources
+  return {
+    books: [
+      'The Inner Game of Tennis by W. Timothy Gallwey',
+      'Winning Ugly by Brad Gilbert',
+    ],
+    videos: [
+      'Essential Tennis - YouTube Channel',
+      'Top Tennis Training - YouTube Channel',
+    ],
+    apps: [
+      'SwingVision (Tennis Analytics)',
+      'TennisKeeper (Match Tracking)',
+    ],
+  };
+}

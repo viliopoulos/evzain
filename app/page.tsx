@@ -9,7 +9,7 @@ export default function Home() {
   const handleEmailSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Email submitted:', email);
-    alert("Thanks! We'll send you more information about EUZAIN.");
+    alert("Thanks! We'll send you more information about EVZAIN.");
     setEmail('');
   };
 
@@ -30,7 +30,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-4xl md:text-5xl font-light tracking-tight">
-              EUZA<span className="logo-in">IN</span>
+              EVZA<span className="logo-in">IN</span>
             </h1>
             <div className="text-right text-sm text-emerald-300">
               Your AI Performance Partner
@@ -82,11 +82,11 @@ export default function Home() {
                 Welcome to the Good Life
               </h3>
               <p className="text-slate-700 leading-relaxed mb-4">
-                <span className="font-semibold text-emerald-600">EUZAIN</span> (εὖ ζήν + AI) — 
+                <span className="font-semibold text-emerald-600">EVZAIN</span> (εὖ ζήν + AI) — 
                 the ancient Greek philosophy of "living well" meets cutting-edge artificial intelligence.
               </p>
               <p className="text-slate-700 leading-relaxed">
-                Built by athletes for athletes, EUZAIN is your 24/7 performance partner. We combine 
+                Built by athletes for athletes, EVZAIN is your 24/7 performance partner. We combine 
                 sports science, personalized coaching, and real-time data from your wearables to optimize 
                 your training, recovery, and mindset. Whether you're starting your journey or chasing 
                 championships, discover the smarter way to train and thrive.
@@ -179,7 +179,7 @@ export default function Home() {
               <span className="font-semibold text-slate-900">Built by:</span> Athletes and coaches who understand the journey
             </p>
             <p className="text-slate-400">
-              Questions? Reach out at hello@euzain.com
+              Questions? Reach out at hello@evzain.com
             </p>
           </div>
         </div>
