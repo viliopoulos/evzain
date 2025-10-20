@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ArrowRight, ArrowLeft, Sparkles, Target } from 'lucide-react';
 import Link from 'next/link';
 
@@ -9,7 +9,8 @@ interface AssessmentData {
   sportOther: string;
   level: string;
   trainingHours: string;
-  goals: string;
+  goals: string[];
+  progressTracking: string;
   frustrations: string[];
   frustrationOther: string;
   confusionFrequency: string;
@@ -20,18 +21,42 @@ interface AssessmentData {
   mentalOther: string;
   mentalStrategies: string[];
   adviceSources: string[];
+  readingHabits: string;
   willingnessToPay: string;
+  injuryStatus?: string;
+  injuryDetails?: string;
 }
 
 export default function Assessment() {
   const [step, setStep] = useState(0);
+
+  // Handle browser back button
+  useEffect(() => {
+    const handlePopState = (e: PopStateEvent) => {
+      e.preventDefault();
+      if (step > 0) {
+        setStep(step - 1);
+      } else {
+        window.location.href = '/';
+      }
+    };
+
+    // Push state for each step
+    window.history.pushState({ step }, '', window.location.pathname);
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [step]);
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [data, setData] = useState<AssessmentData>({
     sport: '',
     sportOther: '',
     level: '',
     trainingHours: '',
-    goals: '',
+    goals: [],
+    progressTracking: '',
     frustrations: [],
     frustrationOther: '',
     confusionFrequency: '',
@@ -42,10 +67,41 @@ export default function Assessment() {
     mentalOther: '',
     mentalStrategies: [],
     adviceSources: [],
+    readingHabits: '',
     willingnessToPay: '',
   });
 
-  const totalSteps = 11; // Added goals question
+  // Pre-fill from athlete referral if exists
+  useEffect(() => {
+    const athleteReferral = localStorage.getItem('athlete_referral');
+    if (athleteReferral) {
+      try {
+        const referralData = JSON.parse(athleteReferral);
+        setData(prev => ({
+          ...prev,
+          sport: referralData.sport || prev.sport,
+          level: referralData.level || prev.level,
+          goals: referralData.default_goals || prev.goals
+        }));
+        // Show notification
+        const notification = document.createElement('div');
+        notification.className = 'fixed top-4 right-4 bg-cyan-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in';
+        notification.innerHTML = `✨ Training plan customized for ${referralData.athlete_name}`;
+        document.body.appendChild(notification);
+        setTimeout(() => notification.remove(), 3000);
+      } catch (e) {
+        console.error('Error parsing athlete referral:', e);
+      }
+    }
+  }, []);
+
+  // Dynamic step count based on conditional questions
+  const getActualSteps = () => {
+    let baseSteps = 12; // Base questions
+    if (data.goals.includes('comeback')) baseSteps += 1; // Injury question
+    return baseSteps;
+  };
+  const totalSteps = getActualSteps();
   const progress = ((step + 1) / totalSteps) * 100;
 
   // Simplified progress messaging: removed microcopy per request
@@ -95,17 +151,14 @@ export default function Assessment() {
               className="w-full px-4 py-3 rounded-xl border-2 border-slate-300 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 transition-all text-lg font-medium text-slate-900 text-black"
             >
               <option value="">Select your sport</option>
-              <option value="soccer">Soccer</option>
-              <option value="basketball">Basketball</option>
               <option value="tennis">Tennis</option>
+              <option value="basketball">Basketball</option>
+              <option value="soccer">Soccer</option>
+              <option value="waterpolo">Water Polo</option>
               <option value="football">Football</option>
-              <option value="baseball">Baseball</option>
-              <option value="track">Track & Field</option>
-              <option value="swimming">Swimming</option>
-              <option value="golf">Golf</option>
-              <option value="volleyball">Volleyball</option>
-              <option value="fitness">General Fitness</option>
-              <option value="other">Other</option>
+              <option value="fitness">Fitness</option>
+              <option value="weightlifting">Weight Training</option>
+              <option value="other">Other (Help us research!)</option>
             </select>
             
             {data.sport === 'other' && (
@@ -167,10 +220,10 @@ export default function Assessment() {
       canProceed: data.trainingHours,
     },
 
-    // Q3: Goals (NEW!)
+    // Q3: Goals (MULTIPLE SELECTION)
     {
       title: "What drives you?",
-      subtitle: "What's your main goal right now?",
+      subtitle: "Select all goals that matter to you",
       content: (
         <div className="space-y-3">
           {[
@@ -184,22 +237,107 @@ export default function Assessment() {
           ].map(goal => (
             <button
               key={goal.value}
-              onClick={() => updateData('goals', goal.value)}
+              onClick={() => toggleArrayItem('goals', goal.value)}
               className={`w-full px-6 py-5 rounded-xl border-2 transition-all text-left ${
-                data.goals === goal.value
+                data.goals.includes(goal.value)
                   ? 'border-emerald-600 bg-emerald-50 text-emerald-900 font-bold shadow-lg'
                   : 'border-slate-300 hover:border-slate-400 text-slate-700'
               }`}
             >
-              <span className="text-lg font-medium">{goal.label}</span>
+              <div className="flex items-center gap-3">
+                <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
+                  data.goals.includes(goal.value) ? 'bg-emerald-600 border-emerald-600' : 'border-slate-400'
+                }`}>
+                  {data.goals.includes(goal.value) && (
+                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                    </svg>
+                  )}
+                </div>
+                <span className="text-lg font-medium">{goal.label}</span>
+              </div>
             </button>
           ))}
         </div>
       ),
-      canProceed: data.goals,
+      canProceed: data.goals.length > 0,
     },
 
-    // Q4: Frustrations
+    // Q4: Progress Tracking (NEW - captures awareness without workout component)
+    {
+      title: "How do you know you're improving?",
+      subtitle: "Understanding your progress awareness",
+      content: (
+        <div className="space-y-3">
+          {[
+            { value: 'clear', label: 'I can clearly see my progress', desc: 'I track metrics and see improvements' },
+            { value: 'somewhat', label: 'I have some sense of progress', desc: 'I notice changes but not systematically' },
+            { value: 'unsure', label: "I'm not sure if I'm improving", desc: 'Hard to tell if training is working' },
+            { value: 'none', label: 'I have no way to measure progress', desc: 'Just starting or never tracked before' },
+          ].map(option => (
+            <button
+              key={option.value}
+              onClick={() => updateData('progressTracking', option.value)}
+              className={`w-full px-6 py-5 rounded-xl border-2 transition-all text-left ${
+                data.progressTracking === option.value
+                  ? 'border-emerald-600 bg-emerald-50 text-emerald-900 font-bold shadow-lg'
+                  : 'border-slate-300 hover:border-slate-400 text-slate-700'
+              }`}
+            >
+              <div className="font-bold text-lg mb-1">{option.label}</div>
+              <div className="text-sm opacity-75">{option.desc}</div>
+            </button>
+          ))}
+        </div>
+      ),
+      canProceed: data.progressTracking,
+    },
+
+    // Q5: Injury Status (CONDITIONAL - only if 'comeback' goal selected)
+    ...(data.goals.includes('comeback') ? [{
+      title: "Tell us about your recovery",
+      subtitle: "This helps us tailor your plan safely",
+      content: (
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-semibold text-slate-800 mb-3">Current Status</label>
+            <div className="space-y-3">
+              {[
+                { value: 'cleared', label: 'Cleared by medical professional' },
+                { value: 'rehab', label: 'Currently in rehab/PT' },
+                { value: 'managing', label: 'Managing on my own' },
+                { value: 'recent', label: 'Recently injured (< 4 weeks)' },
+              ].map(option => (
+                <button
+                  key={option.value}
+                  onClick={() => updateData('injuryStatus', option.value)}
+                  className={`w-full px-6 py-4 rounded-xl border-2 transition-all text-left ${
+                    data.injuryStatus === option.value
+                      ? 'border-emerald-600 bg-emerald-50 text-emerald-900 font-bold'
+                      : 'border-slate-300 hover:border-slate-400 text-slate-700'
+                  }`}
+                >
+                  <span className="font-medium">{option.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-slate-800 mb-3">Brief description (optional)</label>
+            <textarea
+              placeholder="E.g., ACL recovery, shoulder strain, etc."
+              value={data.injuryDetails || ''}
+              onChange={(e) => updateData('injuryDetails', e.target.value)}
+              rows={2}
+              className="w-full px-4 py-3 rounded-xl border-2 border-slate-300 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100 transition-all resize-none text-slate-900"
+            />
+          </div>
+        </div>
+      ),
+      canProceed: data.injuryStatus,
+    }] : []),
+
+    // Q6: Frustrations
     {
       title: "What's holding you back?",
       subtitle: "Select all that apply",
@@ -250,7 +388,7 @@ export default function Assessment() {
       canProceed: data.frustrations.length > 0 || data.frustrationOther,
     },
 
-    // Q5: Confusion Frequency
+    // Q7: Confusion Frequency
     {
       title: 'Ever wondered "why"?',
       subtitle: "How often do you question the purpose of your training?",
@@ -280,7 +418,7 @@ export default function Assessment() {
       canProceed: data.confusionFrequency,
     },
 
-    // Q6: Tracking Method
+    // Q8: Tracking Method
     {
       title: "How do you track progress?",
       subtitle: "Select all that apply",
@@ -324,7 +462,7 @@ export default function Assessment() {
       canProceed: data.trackingMethod.length > 0 || data.trackingOther,
     },
 
-    // Q7: Competition
+    // Q9: Competition
     {
       title: "Do you compete?",
       subtitle: "Organized events, tournaments, or competitions",
@@ -353,10 +491,12 @@ export default function Assessment() {
       canProceed: data.compete,
     },
 
-    // Q8: Mental Challenges
+    // Q10: Mental Performance (adaptive language for all levels)
     {
       title: "The mental game",
-      subtitle: "What hurts your performance most?",
+      subtitle: data.level === 'Professional' || data.level === 'Semi-Pro' || data.level === 'College'
+        ? "What aspects could you optimize further?" 
+        : "What areas would you like to strengthen?",
       content: (
         <div className="space-y-4">
           <div className="space-y-3">
@@ -366,7 +506,8 @@ export default function Assessment() {
               'Nerves under pressure',
               'Lack of confidence',
               'Inconsistent motivation',
-              'Negative self-talk'
+              'Negative self-talk',
+              "Mental performance is strong - just seeking optimization"
             ].map(challenge => (
               <button
                 key={challenge}
@@ -383,7 +524,7 @@ export default function Assessment() {
           </div>
           
           <textarea
-            placeholder="Other thoughts or challenges..."
+            placeholder="Other thoughts or areas to optimize..."
             value={data.mentalOther}
             onChange={(e) => updateData('mentalOther', e.target.value)}
             rows={1}
@@ -395,7 +536,7 @@ export default function Assessment() {
       canProceed: data.mentalChallenges.length > 0 || data.mentalOther,
     },
 
-    // Q9: Mental Strategies
+    // Q11: Mental Strategies
     {
       title: "What do you do when struggling?",
       subtitle: "Your current mental toolkit",
@@ -428,40 +569,69 @@ export default function Assessment() {
       canProceed: data.mentalStrategies.length > 0,
     },
 
-    // Q10: Advice Sources
+    // Q12: Advice Sources & Reading Habits
     {
       title: "Where do you get advice?",
       subtitle: "Select all that apply",
       content: (
-        <div className="grid grid-cols-2 gap-3">
-          {[
-            'Coach/Trainer',
-            'YouTube',
-            'Social Media',
-            'AI/Apps',
-            'Google',
-            'Books',
-            'Friends',
-            'Figure it out myself'
-          ].map(source => (
-            <button
-              key={source}
-              onClick={() => toggleArrayItem('adviceSources', source)}
-              className={`px-4 py-4 rounded-xl border-2 transition-all font-medium ${
-                data.adviceSources.includes(source)
-                  ? 'border-emerald-600 bg-emerald-50 text-emerald-900 font-bold'
-                  : 'border-slate-300 hover:border-slate-400 text-slate-700'
-              }`}
-            >
-              {source}
-            </button>
-          ))}
+        <div className="space-y-6">
+          <div>
+            <label className="block text-sm font-semibold text-slate-800 mb-3">Information Sources</label>
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                'Coach/Trainer',
+                'YouTube',
+                'Social Media',
+                'AI/Apps',
+                'Google',
+                'Books',
+                'Friends',
+                'Figure it out myself'
+              ].map(source => (
+                <button
+                  key={source}
+                  onClick={() => toggleArrayItem('adviceSources', source)}
+                  className={`px-4 py-4 rounded-xl border-2 transition-all font-medium ${
+                    data.adviceSources.includes(source)
+                      ? 'border-emerald-600 bg-emerald-50 text-emerald-900 font-bold'
+                      : 'border-slate-300 hover:border-slate-400 text-slate-700'
+                  }`}
+                >
+                  {source}
+                </button>
+              ))}
+            </div>
+          </div>
+          
+          <div>
+            <label className="block text-sm font-semibold text-slate-800 mb-3">How much do you read about training/performance?</label>
+            <div className="space-y-2">
+              {[
+                { value: 'none', label: 'Never or rarely' },
+                { value: 'sometimes', label: 'Occasionally (few times a month)' },
+                { value: 'regularly', label: 'Regularly (weekly)' },
+                { value: 'constantly', label: 'All the time (daily)' },
+              ].map(option => (
+                <button
+                  key={option.value}
+                  onClick={() => updateData('readingHabits', option.value)}
+                  className={`w-full px-6 py-4 rounded-xl border-2 transition-all text-left ${
+                    data.readingHabits === option.value
+                      ? 'border-emerald-600 bg-emerald-50 text-emerald-900 font-bold'
+                      : 'border-slate-300 hover:border-slate-400 text-slate-700'
+                  }`}
+                >
+                  <span className="font-medium">{option.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       ),
-      canProceed: data.adviceSources.length > 0,
+      canProceed: data.adviceSources.length > 0 && data.readingHabits,
     },
 
-    // Q11: Willingness to Pay
+    // Q13: Willingness to Pay
     {
       title: "One last question",
       subtitle: "What would you invest monthly for expert AI coaching?",
@@ -509,11 +679,12 @@ export default function Assessment() {
           color: #059669;
         }
         .greek-accent {
+          font-family: 'Times New Roman', serif;
           color: #047857;
           opacity: 0.3;
           font-size: 6rem;
           position: absolute;
-it        }
+        }
       `}</style>
 
       {/* Progress Bar */}
@@ -548,7 +719,7 @@ it        }
       {/* Header with Clickable Logo */}
       <Link href="/" className="fixed top-4 left-6 z-40 cursor-pointer hover:opacity-80 transition-opacity">
         <h1 className="text-2xl text-white font-light tracking-tight">
-          EUZA<span className="logo-in">IN</span>
+          EVZA<span className="logo-in">IN</span>
         </h1>
       </Link>
 
@@ -587,29 +758,27 @@ it        }
             </div>
 
             {/* Navigation */}
-            <div className="flex items-center justify-between gap-4">
-              <button
-                onClick={prevStep}
-                onKeyDown={(e) => e.key === 'Enter' && prevStep()}
-                disabled={step === 0}
-                tabIndex={step === 0 ? -1 : 0}
-                className={`px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 ${
-                  step === 0
-                    ? 'opacity-0 pointer-events-none'
-                    : 'bg-slate-100 hover:bg-slate-200 text-slate-800 focus:ring-4 focus:ring-slate-300'
-                }`}
-              >
-                <ArrowLeft className="w-5 h-5" />
-                Back
-              </button>
-
+            <div className="flex gap-4">
+              {step > 0 && (
+                <button
+                  onClick={() => {
+                    localStorage.setItem('assessmentData', JSON.stringify(data));
+                    setStep(step - 1);
+                  }}
+                  className="px-8 py-3 rounded-xl border-2 border-slate-300 text-slate-700 hover:border-emerald-600 hover:bg-emerald-50 transition-all font-semibold flex items-center gap-2"
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                  Back
+                </button>
+              )}
+              
               {step < totalSteps - 1 ? (
                 <button
                   onClick={nextStep}
                   onKeyDown={(e) => e.key === 'Enter' && currentQuestion.canProceed && nextStep()}
                   disabled={!currentQuestion.canProceed}
                   tabIndex={0}
-                  className={`px-8 py-3 rounded-xl font-bold transition-all flex items-center gap-2 ${
+                  className={`flex-1 px-8 py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2 ${
                     currentQuestion.canProceed
                       ? 'bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white shadow-lg focus:ring-4 focus:ring-emerald-300'
                       : 'bg-slate-200 text-slate-400 cursor-not-allowed'
@@ -624,7 +793,7 @@ it        }
                   onKeyDown={(e) => e.key === 'Enter' && currentQuestion.canProceed && handleSubmit()}
                   disabled={!currentQuestion.canProceed}
                   tabIndex={0}
-                  className={`px-8 py-3 rounded-xl font-bold transition-all flex items-center gap-2 ${
+                  className={`flex-1 px-8 py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2 ${
                     currentQuestion.canProceed
                       ? 'bg-gradient-to-r from-cyan-600 to-cyan-700 hover:from-cyan-700 hover:to-cyan-800 text-white shadow-lg focus:ring-4 focus:ring-cyan-300'
                       : 'bg-slate-200 text-slate-400 cursor-not-allowed'

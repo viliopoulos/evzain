@@ -1,65 +1,51 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { ArrowRight, BookOpen, Video, Smartphone } from 'lucide-react';
-import { generateBlueprint } from '@/lib/decisionTree';
+import { ArrowRight, Target, TrendingUp, Brain, Heart, Award, Clock, Mail, Dumbbell, Activity, BookOpen, Zap, Play, Watch, ChevronRight, Check } from 'lucide-react';
+import { generateRecommendations } from '@/lib/recommendation-generator';
+import { AssessmentData, AthleteProfile, TrainingRecommendation } from '@/lib/types';
+import { getExercisesForProfile, Exercise } from '@/lib/elite-exercises';
 
-type TrainingRecommendation = {
-  focus: string[];
-  drills: string[];
-  frequency: string;
-  notes?: string;
-};
-
-type Blueprint = {
-  hero: {
-    title: string;
-    subtitle: string;
-    goal: string;
-  };
-  currentState: {
-    level: string;
-    trainingHours: string;
-    challenges: string[];
-    mentalChallenges: string[];
-  };
-  recommendations: {
-    technical: TrainingRecommendation;
-    tactical: TrainingRecommendation;
-    mental: TrainingRecommendation;
-    physical: TrainingRecommendation;
-  };
-  progressionPath: {
-    current: string;
-    nextMilestone: string;
-    timeline: string;
-    keyFocusAreas: string[];
-  };
-  resources: {
-    books: string[];
-    videos: string[];
-    apps: string[];
-  };
-};
+interface ResultsState {
+  profile: AthleteProfile;
+  recommendations: TrainingRecommendation[];
+  metrics: any[];
+  nextSteps: string[];
+  timeline: string;
+  assessmentData: AssessmentData;
+}
 
 export default function ResultsPage() {
-  const [blueprint, setBlueprint] = useState<Blueprint | null>(null);
+  const [results, setResults] = useState<ResultsState | null>(null);
   const [loading, setLoading] = useState(true);
   const [email, setEmail] = useState('');
   const [emailSubmitted, setEmailSubmitted] = useState(false);
+  const [showResearch, setShowResearch] = useState(false);
+  const [tangibleExercises, setTangibleExercises] = useState<Exercise[]>([]);
 
   useEffect(() => {
     const fetchAssessment = async () => {
       try {
-        // In a real app, you would fetch from your API
         const savedData = localStorage.getItem('assessmentData');
         if (savedData) {
-          const data = JSON.parse(savedData);
-          const generatedBlueprint = generateBlueprint(data);
-          setBlueprint(generatedBlueprint);
+          const assessmentData: AssessmentData = JSON.parse(savedData);
+          const generated = generateRecommendations(assessmentData);
+          
+          // Get tangible exercises
+          const exercises = getExercisesForProfile(
+            assessmentData.sport,
+            generated.profile.primaryFocus,
+            assessmentData.level
+          );
+          
+          setResults({
+            ...generated,
+            assessmentData
+          });
+          setTangibleExercises(exercises);
         }
       } catch (error) {
-        console.error('Error generating blueprint:', error);
+        console.error('Error generating recommendations:', error);
       } finally {
         setLoading(false);
       }
@@ -70,263 +56,417 @@ export default function ResultsPage() {
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, you would save the email to your database
+    // TODO: Save to database
     console.log('Email submitted:', email);
     setEmailSubmitted(true);
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-cyan-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500 mx-auto mb-4"></div>
-          <p className="text-emerald-800">Generating your personalized blueprint...</p>
+          <div className="relative">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-emerald-500 mx-auto mb-6"></div>
+            <Target className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 text-cyan-400" />
+          </div>
+          <p className="text-white text-lg font-semibold">Analyzing your profile...</p>
+          <p className="text-slate-400 mt-2">Building your personalized training blueprint</p>
         </div>
       </div>
     );
   }
 
-  if (!blueprint) {
+  if (!results) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-cyan-50 flex items-center justify-center p-4">
-        <div className="max-w-lg text-center">
-          <h1 className="text-2xl font-bold text-emerald-800 mb-4">No Assessment Found</h1>
-          <p className="mb-6 text-gray-700">We couldn't find your assessment results. Please complete the assessment first.</p>
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
+        <div className="max-w-lg text-center bg-slate-800/50 backdrop-blur-sm p-8 rounded-2xl border border-slate-700">
+          <Target className="w-16 h-16 text-cyan-400 mx-auto mb-4" />
+          <h1 className="text-2xl font-bold text-white mb-4">No Assessment Found</h1>
+          <p className="mb-6 text-slate-300">Complete your assessment to get your personalized blueprint.</p>
           <a 
             href="/assessment" 
-            className="inline-flex items-center px-6 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors"
+            className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-lg font-semibold hover:from-emerald-700 hover:to-emerald-800 transition-all shadow-lg"
           >
             Take Assessment
-            <ArrowRight className="ml-2 h-4 w-4" />
+            <ArrowRight className="ml-2 h-5 w-5" />
           </a>
         </div>
       </div>
     );
   }
 
+  const { profile, recommendations, assessmentData } = results;
+
+  const getSegmentColor = () => {
+    switch(profile.segment) {
+      case 'elite': return { gradient: 'from-purple-600 via-purple-700 to-indigo-800', badge: 'bg-purple-500', glow: 'shadow-purple-500/50' };
+      case 'advanced': return { gradient: 'from-cyan-600 via-cyan-700 to-blue-800', badge: 'bg-cyan-500', glow: 'shadow-cyan-500/50' };
+      case 'intermediate': return { gradient: 'from-emerald-600 via-emerald-700 to-teal-800', badge: 'bg-emerald-500', glow: 'shadow-emerald-500/50' };
+      default: return { gradient: 'from-blue-600 via-blue-700 to-indigo-800', badge: 'bg-blue-500', glow: 'shadow-blue-500/50' };
+    }
+  };
+
+  const segmentColor = getSegmentColor();
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-cyan-50 py-8 px-4 sm:px-6 lg:px-8">
-      {/* Hero Section */}
-      <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden mb-8">
-        <div className="p-8">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-emerald-800 mb-2">{blueprint.hero.title}</h1>
-            <p className="text-gray-600">{blueprint.hero.subtitle}</p>
-            <div className="mt-4 inline-block bg-emerald-100 text-emerald-800 px-4 py-2 rounded-full text-sm font-medium">
-              Goal: {blueprint.hero.goal}
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-12 px-4 sm:px-6 lg:px-8">
+      <style jsx>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&display=swap');
+        .logo-in {
+          font-family: 'Playfair Display', serif;
+          font-style: italic;
+          font-weight: 700;
+          color: #059669;
+        }
+        .zeta-mark {
+          font-family: 'Times New Roman', serif;
+          font-size: 160px;
+          color: #0891b2;
+          opacity: 0.06;
+          position: absolute;
+          right: -40px;
+          top: 50%;
+          transform: translateY(-50%) rotate(15deg);
+          user-select: none;
+          pointer-events: none;
+        }
+      `}</style>
+
+      {/* Header */}
+      <div className="max-w-6xl mx-auto mb-12">
+        <a href="/" className="inline-flex items-center text-white hover:text-cyan-400 transition-colors">
+          <h1 className="text-3xl font-light tracking-tight">
+            EVZA<span className="logo-in">IN</span>
+          </h1>
+        </a>
+      </div>
+
+      {/* Hero - Athlete Profile Card */}
+      <div className={`max-w-6xl mx-auto bg-gradient-to-br ${segmentColor.gradient} rounded-3xl shadow-2xl ${segmentColor.glow} overflow-hidden mb-12 relative`}>
+        <div className="zeta-mark">ζ</div>
+        <div className="relative z-10 p-8 md:p-12">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-8">
+            <div>
+              <div className={`inline-flex items-center gap-2 ${segmentColor.badge} text-white px-4 py-2 rounded-full font-bold text-sm mb-4`}>
+                <Award className="w-4 h-4" />
+                {profile.segment.charAt(0).toUpperCase() + profile.segment.slice(1)} Athlete
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">
+                Your Training Blueprint
+              </h1>
+              <p className="text-white/90 text-xl">
+                {assessmentData.sport === 'other' ? assessmentData.sportOther : assessmentData.sport.charAt(0).toUpperCase() + assessmentData.sport.slice(1)} • {assessmentData.level}
+              </p>
+            </div>
+            <div className="flex flex-col gap-3">
+              <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4 text-center min-w-[140px]">
+                <Clock className="w-6 h-6 text-white mx-auto mb-2" />
+                <div className="text-white font-bold text-2xl">{assessmentData.trainingHours}</div>
+                <div className="text-white/80 text-sm">per week</div>
+              </div>
+              <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4 text-center min-w-[140px]">
+                <TrendingUp className="w-6 h-6 text-white mx-auto mb-2" />
+                <div className="text-white font-bold text-lg">{profile.commitmentLevel}</div>
+                <div className="text-white/80 text-sm">commitment</div>
+              </div>
             </div>
           </div>
 
-          {/* Current State */}
-          <Section title="Where You Are Now">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <h3 className="font-medium text-gray-900 mb-2">Current Level</h3>
-                <p className="text-gray-700">{blueprint.currentState.level}</p>
-              </div>
-              <div>
-                <h3 className="font-medium text-gray-900 mb-2">Training Hours</h3>
-                <p className="text-gray-700">{blueprint.currentState.trainingHours} per week</p>
-              </div>
-              {blueprint.currentState.challenges.length > 0 && (
-                <div className="md:col-span-2">
-                  <h3 className="font-medium text-gray-900 mb-2">Challenges</h3>
-                  <ul className="list-disc pl-5 text-gray-700 space-y-1">
-                    {blueprint.currentState.challenges.map((challenge, i) => (
-                      <li key={i}>{challenge}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-5">
+              <Target className="w-6 h-6 text-white mb-2" />
+              <h3 className="text-white font-semibold mb-1">Primary Focus</h3>
+              <p className="text-white/90 capitalize">{profile.primaryFocus.replace(/_/g, ' ')}</p>
             </div>
-          </Section>
-
-          <SectionDivider />
-
-          {/* Recommendations */}
-          <Section title="Your Training Plan">
-            <div className="space-y-8">
-              <RecommendationCard 
-                title="Technical Skills"
-                recommendation={blueprint.recommendations.technical}
-              />
-              <RecommendationCard 
-                title="Tactical Training"
-                recommendation={blueprint.recommendations.tactical}
-              />
-              <RecommendationCard 
-                title="Mental Game"
-                recommendation={blueprint.recommendations.mental}
-              />
-              <RecommendationCard 
-                title="Physical Conditioning"
-                recommendation={blueprint.recommendations.physical}
-              />
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-5">
+              <Brain className="w-6 h-6 text-white mb-2" />
+              <h3 className="text-white font-semibold mb-1">Training Style</h3>
+              <p className="text-white/90 capitalize">{profile.personalization.tone}</p>
             </div>
-          </Section>
-
-          <SectionDivider />
-
-          {/* Progression Path */}
-          <Section title="Your Path to Improvement">
-            <div className="bg-emerald-50 p-6 rounded-lg">
-              <div className="flex items-center justify-between mb-4">
-                <div className="text-center">
-                  <div className="text-sm text-gray-600">Current</div>
-                  <div className="font-medium text-emerald-800">{blueprint.progressionPath.current}</div>
-                </div>
-                <div className="flex-1 px-4">
-                  <div className="h-1 bg-gray-200 rounded-full">
-                    <div className="h-full bg-emerald-500 rounded-full w-1/3"></div>
-                  </div>
-                </div>
-                <div className="text-center">
-                  <div className="text-sm text-gray-600">Next Milestone</div>
-                  <div className="font-medium text-emerald-800">{blueprint.progressionPath.nextMilestone}</div>
-                </div>
-              </div>
-              <div className="text-center text-sm text-gray-600 mt-2">
-                Estimated timeline: {blueprint.progressionPath.timeline}
-              </div>
-              
-              {blueprint.progressionPath.keyFocusAreas.length > 0 && (
-                <div className="mt-6">
-                  <h4 className="font-medium text-gray-900 mb-3">Key Focus Areas</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {blueprint.progressionPath.keyFocusAreas.map((area, i) => (
-                      <span key={i} className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-emerald-100 text-emerald-800">
-                        {area}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-5">
+              <Zap className="w-6 h-6 text-white mb-2" />
+              <h3 className="text-white font-semibold mb-1">Urgency Level</h3>
+              <p className="text-white/90 capitalize">{profile.personalization.urgency}</p>
             </div>
-          </Section>
-
-          <SectionDivider />
-
-          {/* Resources */}
-          <Section title="Recommended Resources">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <ResourceCard 
-                icon={<BookOpen className="h-6 w-6 text-emerald-600" />}
-                title="Books"
-                items={blueprint.resources.books}
-              />
-              <ResourceCard 
-                icon={<Video className="h-6 w-6 text-emerald-600" />}
-                title="Videos"
-                items={blueprint.resources.videos}
-              />
-              <ResourceCard 
-                icon={<Smartphone className="h-6 w-6 text-emerald-600" />}
-                title="Apps"
-                items={blueprint.resources.apps}
-              />
-            </div>
-          </Section>
-
-          {/* Email Capture */}
-          {!emailSubmitted ? (
-            <div className="mt-12 bg-emerald-50 p-6 rounded-xl text-center">
-              <h3 className="text-lg font-medium text-emerald-800 mb-2">Get Your Complete Blueprint</h3>
-              <p className="text-gray-600 mb-4">Enter your email to save your blueprint and receive updates</p>
-              <form onSubmit={handleEmailSubmit} className="max-w-md mx-auto flex gap-2">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="your@email.com"
-                  className="flex-1 min-w-0 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                  required
-                />
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
-                >
-                  Send Me My Blueprint
-                </button>
-              </form>
-            </div>
-          ) : (
-            <div className="mt-12 bg-emerald-100 p-6 rounded-xl text-center">
-              <h3 className="text-lg font-medium text-emerald-800 mb-2">Check Your Inbox!</h3>
-              <p className="text-gray-700">We've sent your complete blueprint to {email}</p>
-            </div>
-          )}
+          </div>
         </div>
       </div>
-    </div>
-  );
-}
 
-// Helper Components
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <section className="mb-10">
-      <h2 className="text-2xl font-bold text-emerald-700 mb-6 pb-2 border-b border-emerald-100">
-        {title}
-      </h2>
-      {children}
-    </section>
-  );
-}
+      {/* TOP 3 EXERCISES - Apple-like Clean Section */}
+      {tangibleExercises.length > 0 && (
+        <div className="max-w-6xl mx-auto mb-16">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">Your Top 3 Exercises</h2>
+            <p className="text-slate-400 text-lg">What elite athletes actually do. Start here.</p>
+          </div>
 
-function SectionDivider() {
-  return <div className="border-t border-gray-200 my-10"></div>;
-}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {tangibleExercises.slice(0, 3).map((exercise, idx) => (
+              <div key={idx} className="bg-slate-800/30 backdrop-blur-xl rounded-3xl overflow-hidden border border-slate-700/50 hover:border-emerald-500/50 transition-all group">
+                {/* Visual Placeholder */}
+                <div className="relative h-48 bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>
+                  <Play className="w-16 h-16 text-white/40 group-hover:text-emerald-400 transition-colors" />
+                  <div className="absolute bottom-3 left-4 right-4">
+                    <div className="text-xs text-emerald-400 font-semibold uppercase tracking-wider mb-1">
+                      Exercise {idx + 1}
+                    </div>
+                    <div className="text-white font-bold text-lg line-clamp-2">{exercise.name}</div>
+                  </div>
+                </div>
 
-function RecommendationCard({ title, recommendation }: { title: string; recommendation: TrainingRecommendation }) {
-  return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
-      <h3 className="text-lg font-medium text-emerald-800 mb-4">{title}</h3>
-      
-      <div className="mb-4">
-        <h4 className="font-medium text-gray-900 mb-2">Focus Areas</h4>
-        <ul className="list-disc pl-5 text-gray-700 space-y-1">
-          {recommendation.focus.map((item, i) => (
-            <li key={i}>{item}</li>
-          ))}
-        </ul>
-      </div>
-      
-      <div className="mb-4">
-        <h4 className="font-medium text-gray-900 mb-2">Recommended Drills</h4>
-        <ul className="list-disc pl-5 text-gray-700 space-y-1">
-          {recommendation.drills.map((drill, i) => (
-            <li key={i}>{drill}</li>
-          ))}
-        </ul>
-      </div>
-      
-      <div className="text-sm text-gray-600">
-        <span className="font-medium">Frequency:</span> {recommendation.frequency}
-      </div>
-      
-      {recommendation.notes && (
-        <div className="mt-3 p-3 bg-amber-50 text-amber-800 text-sm rounded">
-          {recommendation.notes}
+                {/* Content */}
+                <div className="p-6">
+                  <p className="text-slate-300 text-sm mb-4 leading-relaxed">{exercise.description}</p>
+                  
+                  {/* Elite Insight Badge */}
+                  <div className="bg-gradient-to-r from-purple-900/30 to-indigo-900/30 rounded-xl p-4 mb-4 border border-purple-500/20">
+                    <div className="flex items-start gap-2">
+                      <Award className="w-4 h-4 text-purple-400 mt-0.5 flex-shrink-0" />
+                      <p className="text-purple-200 text-xs leading-relaxed">{exercise.eliteInsight}</p>
+                    </div>
+                  </div>
+
+                  {/* Quick Stats */}
+                  <div className="space-y-2">
+                    {exercise.frequency && (
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-slate-500">Frequency</span>
+                        <span className="text-white font-semibold">{exercise.frequency}</span>
+                      </div>
+                    )}
+                    {exercise.duration && (
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-slate-500">Duration</span>
+                        <span className="text-white font-semibold">{exercise.duration}</span>
+                      </div>
+                    )}
+                    {exercise.sets && exercise.reps && (
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-slate-500">Volume</span>
+                        <span className="text-white font-semibold">{exercise.sets} × {exercise.reps}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* How To Do */}
+                  <details className="mt-4">
+                    <summary className="text-emerald-400 text-sm font-semibold cursor-pointer hover:text-emerald-300 flex items-center gap-2">
+                      <ChevronRight className="w-4 h-4" />
+                      How to do it
+                    </summary>
+                    <div className="mt-3 space-y-2 pl-6">
+                      {exercise.howToDo.map((step, stepIdx) => (
+                        <div key={stepIdx} className="flex items-start gap-2">
+                          <Check className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
+                          <span className="text-slate-400 text-sm">{step}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </details>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Wearables Teaser */}
+          <div className="mt-8 bg-gradient-to-r from-cyan-900/20 to-blue-900/20 backdrop-blur-sm rounded-2xl border border-cyan-500/30 p-6">
+            <div className="flex items-center gap-4">
+              <Watch className="w-10 h-10 text-cyan-400" />
+              <div className="flex-1">
+                <h3 className="text-white font-bold text-lg mb-1">Track Everything</h3>
+                <p className="text-slate-400 text-sm">
+                  Soon: Connect your Whoop, Oura, Apple Watch, or Garmin. We'll integrate your metrics and adapt your training in real-time.
+                </p>
+              </div>
+              <div className="text-cyan-400 text-sm font-semibold whitespace-nowrap">Coming Soon</div>
+            </div>
+          </div>
         </div>
       )}
-    </div>
-  );
-}
 
-function ResourceCard({ icon, title, items }: { icon: React.ReactNode; title: string; items: string[] }) {
-  return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6 text-center">
-      <div className="w-12 h-12 mx-auto bg-emerald-100 rounded-full flex items-center justify-center mb-3">
-        {icon}
-      </div>
-      <h3 className="font-medium text-gray-900 mb-3">{title}</h3>
-      <ul className="space-y-2 text-sm text-gray-600">
-        {items.map((item, i) => (
-          <li key={i} className="line-clamp-2">
-            {item}
-          </li>
+      {/* Recommendations Section */}
+      <div className="max-w-6xl mx-auto space-y-8">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">The Complete Blueprint</h2>
+          <p className="text-slate-400 text-lg max-w-3xl mx-auto">
+            Your personalized training plan, built on proven methodologies and elite athlete insights.
+          </p>
+        </div>
+
+        {recommendations.map((rec, idx) => (
+          <div key={rec.id} className="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700 overflow-hidden hover:border-emerald-500/50 transition-all">
+            <div className="p-8">
+              {/* Recommendation Header */}
+              <div className="flex items-start gap-4 mb-6">
+                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${segmentColor.gradient} flex items-center justify-center flex-shrink-0`}>
+                  {rec.category === 'technical' && <Dumbbell className="w-6 h-6 text-white" />}
+                  {rec.category === 'tactical' && <Target className="w-6 h-6 text-white" />}
+                  {rec.category === 'mental' && <Brain className="w-6 h-6 text-white" />}
+                  {rec.category === 'physical' && <Activity className="w-6 h-6 text-white" />}
+                  {rec.category === 'recovery' && <Heart className="w-6 h-6 text-white" />}
+                </div>
+                <div className="flex-1">
+                  <div className="text-sm text-emerald-400 font-semibold uppercase tracking-wide mb-1">
+                    {rec.category}
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-2">{rec.title}</h3>
+                  <p className="text-slate-300 text-lg leading-relaxed">{rec.description}</p>
+                </div>
+              </div>
+
+              {/* Simplified Why - Just the essential insight */}
+              <div className="bg-gradient-to-r from-emerald-900/20 to-cyan-900/20 rounded-xl p-4 mb-6 border-l-2 border-emerald-500">
+                <p className="text-slate-300 text-sm leading-relaxed italic">"{rec.why.split('.')[0]}."</p>
+              </div>
+
+              {/* Key Details Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div className="bg-slate-900/30 rounded-lg p-4">
+                  <div className="text-emerald-400 text-sm font-semibold mb-1">Frequency</div>
+                  <div className="text-white font-medium">{rec.frequency}</div>
+                </div>
+                <div className="bg-slate-900/30 rounded-lg p-4">
+                  <div className="text-emerald-400 text-sm font-semibold mb-1">Duration</div>
+                  <div className="text-white font-medium">{rec.duration}</div>
+                </div>
+                <div className="bg-slate-900/30 rounded-lg p-4">
+                  <div className="text-emerald-400 text-sm font-semibold mb-1">Metrics to Track</div>
+                  <div className="text-white font-medium">{rec.metrics.length} key indicators</div>
+                </div>
+              </div>
+
+              {/* Progression Path */}
+              {rec.progressionPath && rec.progressionPath.length > 0 && (
+                <div className="mb-6">
+                  <h4 className="text-white font-semibold mb-3">Progression Pathway</h4>
+                  <div className="space-y-2">
+                    {rec.progressionPath.map((phase, phaseIdx) => (
+                      <div key={phaseIdx} className="flex items-start gap-3">
+                        <div className="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm font-bold mt-0.5">
+                          {phaseIdx + 1}
+                        </div>
+                        <div className="text-slate-300">{phase}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
+
+      {/* Timeline */}
+      <div className="max-w-6xl mx-auto mt-12 bg-gradient-to-r from-emerald-900/30 to-cyan-900/30 backdrop-blur-sm rounded-2xl border border-emerald-500/30 p-8">
+        <div className="text-center">
+          <Clock className="w-12 h-12 text-emerald-400 mx-auto mb-4" />
+          <h3 className="text-2xl font-bold text-white mb-2">Your Timeline</h3>
+          <p className="text-slate-300 text-lg">{results.timeline}</p>
+          <p className="text-slate-400 mt-4">
+            Consistency and quality execution matter more than perfection. Track your progress, adjust as needed, and trust the process.
+          </p>
+        </div>
+      </div>
+
+      {/* Collapsible Research Report */}
+      <div className="max-w-6xl mx-auto mt-8">
+        <button
+          onClick={() => setShowResearch(!showResearch)}
+          className="w-full bg-slate-800/30 backdrop-blur-sm rounded-2xl border border-slate-700/50 hover:border-slate-600 transition-all p-6 text-left"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <BookOpen className="w-6 h-6 text-slate-400" />
+              <div>
+                <h3 className="text-white font-semibold">View Research Foundation</h3>
+                <p className="text-slate-500 text-sm">Scientific studies and methodologies behind your blueprint</p>
+              </div>
+            </div>
+            <ChevronRight className={`w-5 h-5 text-slate-400 transition-transform ${showResearch ? 'rotate-90' : ''}`} />
+          </div>
+        </button>
+        
+        {showResearch && (
+          <div className="mt-4 bg-slate-800/30 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-8">
+            <h4 className="text-white font-bold text-xl mb-6">Research & Methodologies</h4>
+            <div className="space-y-8">
+              {recommendations.map((rec, idx) => (
+                rec.researchCitations && rec.researchCitations.length > 0 && (
+                  <div key={idx} className="border-l-2 border-emerald-500 pl-6">
+                    <h5 className="text-emerald-400 font-semibold mb-2">{rec.title}</h5>
+                    <div className="space-y-3">
+                      <div className="text-slate-300 leading-relaxed text-sm">{rec.why}</div>
+                      <div className="space-y-2 mt-4">
+                        <div className="text-slate-400 text-xs font-semibold uppercase tracking-wider">Citations</div>
+                        {rec.researchCitations.map((citation, citIdx) => (
+                          <div key={citIdx} className="text-slate-500 text-sm flex items-start gap-2">
+                            <span className="text-emerald-600 mt-1">•</span>
+                            <span>{citation}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )
+              ))}
+            </div>
+            
+            <div className="mt-8 pt-6 border-t border-slate-700">
+              <p className="text-slate-400 text-sm italic text-center">
+                All recommendations are backed by peer-reviewed research and proven elite athlete methodologies. 
+                We don't guess - we follow the science.
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Email Capture */}
+      {!emailSubmitted ? (
+        <div className="max-w-2xl mx-auto mt-12 bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700 p-8 text-center">
+          <Mail className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
+          <h3 className="text-2xl font-bold text-white mb-2">Save Your Blueprint</h3>
+          <p className="text-slate-300 mb-6">Get this sent to your email + early access to EVZAIN when we launch</p>
+          <form onSubmit={handleEmailSubmit} className="flex flex-col sm:flex-row gap-3">
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="your@email.com"
+              className="flex-1 px-4 py-3 rounded-xl bg-slate-900/50 border border-slate-600 text-white placeholder:text-slate-500 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+              required
+            />
+            <button
+              type="submit"
+              className="px-8 py-3 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-xl font-semibold hover:from-emerald-700 hover:to-emerald-800 transition-all shadow-lg"
+            >
+              Send My Blueprint
+            </button>
+          </form>
+        </div>
+      ) : (
+        <div className="max-w-2xl mx-auto mt-12 bg-emerald-900/20 backdrop-blur-sm rounded-2xl border border-emerald-500/50 p-8 text-center">
+          <div className="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <h3 className="text-2xl font-bold text-white mb-2">Check Your Inbox!</h3>
+          <p className="text-slate-300">We've sent your complete blueprint to {email}</p>
+        </div>
+      )}
+
+      {/* Footer CTA */}
+      <div className="max-w-6xl mx-auto mt-16 text-center">
+        <a 
+          href="/" 
+          className="inline-flex items-center text-slate-400 hover:text-white transition-colors"
+        >
+          ← Back to home
+        </a>
+      </div>
     </div>
   );
 }
