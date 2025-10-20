@@ -1,9 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
+// Initialize Supabase client only if environment variables are available
+import { SupabaseClient } from '@supabase/supabase-js';
+let supabase: SupabaseClient | undefined;
+try {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+  if (supabaseUrl && supabaseServiceKey) {
+    supabase = createClient(supabaseUrl, supabaseServiceKey);
+  } else {
+    console.warn('Supabase environment variables are missing');
+  }
+} catch (error) {
+  console.error('Failed to initialize Supabase client:', error);
+}
 
 // Email templates
 const EMAIL_TEMPLATES = {
@@ -136,6 +147,18 @@ const EMAIL_TEMPLATES = {
 };
 
 export async function POST(request: NextRequest) {
+  // If Supabase client isn't initialized, return a 503 Service Unavailable
+  if (!supabase) {
+    console.error('Supabase client not initialized - check environment variables');
+    return NextResponse.json(
+      { 
+        error: 'Service temporarily unavailable',
+        details: 'Email service is not properly configured'
+      },
+      { status: 503 }
+    );
+  }
+
   try {
     const { to, type, data } = await request.json();
 
@@ -208,4 +231,15 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+// Add a GET handler for health checks
+export async function GET() {
+  return NextResponse.json({ 
+    status: supabase ? 'ok' : 'degraded',
+    message: supabase 
+      ? 'Email service is operational' 
+      : 'Email service is not properly configured - check environment variables',
+    timestamp: new Date().toISOString()
+  });
 }
