@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { saveAssessment } from '@/lib/supabase';
+import { saveAssessment, SupabaseConfigError } from '@/lib/supabase';
 
 export async function POST(request: Request) {
   try {
@@ -18,6 +18,17 @@ export async function POST(request: Request) {
 
     return NextResponse.json(assessment);
   } catch (error) {
+    if (error instanceof SupabaseConfigError) {
+      console.error('Supabase not configured for assessments');
+      return NextResponse.json(
+        {
+          error: 'Service temporarily unavailable',
+          details: 'Assessment service is not properly configured',
+        },
+        { status: 503 }
+      );
+    }
+
     console.error('Error in assessment submission:', error);
     return NextResponse.json(
       { error: 'Failed to process assessment' },
