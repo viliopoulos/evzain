@@ -1,5 +1,9 @@
 import { NextResponse } from 'next/server';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import {
+  EmailConfigError,
+  sendTransactionalEmail,
+} from '@/lib/email/mailer';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
@@ -181,22 +185,26 @@ export async function POST(request: Request) {
       );
     }
 
-    // TODO: Send assessment complete email if email provided
-    // if (data.email) {
-    //   await fetch('/api/send-email', {
-    //     method: 'POST',
-    //     body: JSON.stringify({
-    //       to: data.email,
-    //       type: 'assessment_complete',
-    //       data: {
-    //         sport: savedAssessment.sport,
-    //         level: savedAssessment.level,
-    //         athlete_segment: savedAssessment.athlete_segment,
-    //         primary_focus: savedAssessment.primary_focus
-    //       }
-    //     })
-    //   });
-    // }
+    if (data.email) {
+      try {
+        await sendTransactionalEmail({
+          to: data.email,
+          type: 'assessment_complete',
+          data: {
+            sport: savedAssessment.sport,
+            level: savedAssessment.level,
+            athlete_segment: savedAssessment.athlete_segment,
+            primary_focus: savedAssessment.primary_focus,
+          },
+        });
+      } catch (err) {
+        if (err instanceof EmailConfigError) {
+          console.warn('Resend not configured; skipping assessment email');
+        } else {
+          console.error('Failed to send assessment email:', err);
+        }
+      }
+    }
 
     return NextResponse.json({
       success: true,

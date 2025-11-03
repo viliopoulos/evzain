@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import {
+  EmailConfigError,
+  sendTransactionalEmail,
+} from '@/lib/email/mailer';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
@@ -97,9 +101,31 @@ export async function POST(request: NextRequest) {
     if (error) {
       console.error('Error saving waitlist signup:', error);
       return NextResponse.json(
-        { error: 'Failed to save email' },
+        {
+          error: 'Failed to save email',
+          details: error.message || 'Unknown database error'
+        },
         { status: 500 }
       );
+    }
+
+    let emailSent = false;
+    let emailError: string | undefined;
+    try {
+      await sendTransactionalEmail({
+        to: trimmedEmail,
+        type: 'waitlist_welcome',
+        data: { source: source || 'homepage' },
+      });
+      emailSent = true;
+    } catch (err) {
+      if (err instanceof EmailConfigError) {
+        console.warn('Resend not configured; skipping welcome email');
+        emailError = err.message;
+      } else {
+        console.error('Failed to send waitlist welcome email:', err);
+        emailError = err instanceof Error ? err.message : 'Unknown email error';
+      }
     }
 
     // TODO: Trigger welcome email via /api/send-email
@@ -114,13 +140,18 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       message: "You're part of the movement! Welcome to EVZAIN.",
-      data
+      data,
+      emailSent,
+      emailError,
     });
 
   } catch (error) {
     console.error('Error in waitlist signup:', error);
     return NextResponse.json(
-      { error: 'Failed to process signup' },
+      {
+        error: 'Failed to process signup',
+        details: error instanceof Error ? error.message : undefined
+      },
       { status: 500 }
     );
   }
