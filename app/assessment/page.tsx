@@ -129,11 +129,51 @@ export default function Assessment() {
     if (step > 0) setStep(step - 1);
   };
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [startTime] = useState(Date.now());
+
   const handleSubmit = async () => {
-    console.log('Assessment data:', data);
-    // Navigate to results page with data
-    localStorage.setItem('assessmentData', JSON.stringify(data));
-    window.location.href = '/results';
+    if (isSubmitting) return;
+    
+    setIsSubmitting(true);
+
+    try {
+      // Calculate time spent
+      const timeSpent = Math.floor((Date.now() - startTime) / 1000);
+
+      // Prepare data for API
+      const assessmentData = {
+        ...data,
+        timeSpent,
+        sessionId: localStorage.getItem('sessionId') || undefined
+      };
+
+      // Call API to save assessment
+      const response = await fetch('/api/assessments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(assessmentData),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        // Store assessment ID and data locally for results page
+        localStorage.setItem('assessmentData', JSON.stringify(data));
+        localStorage.setItem('assessmentId', result.assessment.id);
+        
+        // Navigate to results page
+        window.location.href = '/results';
+      } else {
+        console.error('Assessment submission failed:', result);
+        alert(result.error || 'Failed to save assessment. Please try again.');
+        setIsSubmitting(false);
+      }
+    } catch (error) {
+      console.error('Error submitting assessment:', error);
+      alert('Something went wrong. Please try again.');
+      setIsSubmitting(false);
+    }
   };
 
   const questions = [

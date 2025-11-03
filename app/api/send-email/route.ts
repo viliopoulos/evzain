@@ -206,6 +206,10 @@ export async function POST(request: NextRequest) {
     //   subject: template.subject,
     //   html: emailBody
     // });
+    
+    // Note: Email forwarding from performance@evzain.com to viliopoulo@gmail.com
+    // should be configured in your domain provider (e.g., Vercel, Cloudflare, Google Workspace).
+    // This is a DNS/email routing configuration, not handled in code.
 
     console.log(`Email queued: ${type} to ${to}`);
 

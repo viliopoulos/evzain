@@ -7,11 +7,38 @@ import { Mail, ArrowRight } from 'lucide-react';
 export default function Home() {
   const [email, setEmail] = useState('');
 
-  const handleEmailSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Email submitted:', email);
-    alert("You're part of the movement! Welcome to EVZAIN.");
-    setEmail('');
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          email, 
+          source: 'homepage' 
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        alert(result.message || "You're part of the movement! Welcome to EVZAIN.");
+        setEmail('');
+      } else {
+        alert(result.error || 'Failed to join waitlist. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error submitting email:', error);
+      alert('Something went wrong. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
