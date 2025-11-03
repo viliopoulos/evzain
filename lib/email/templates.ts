@@ -39,8 +39,8 @@ export const EMAIL_TEMPLATES = {
       
       <p>In the meantime, take our 5-minute assessment to help us understand your training journey better:</p>
       
-      <a href="${(process.env.NEXT_PUBLIC_SITE_URL || 'https://evzain.com') + '/assessment'}" class="button">
-        Take the Assessment →
+      <a href="https://evzain.com/assessment" class="button">
+        Take the Assessment ζ
       </a>
       
       <p style="margin-top: 30px;">Built by athletes who competed at the highest level, EVZAIN blends ancient wisdom (εὖ ζήν - "living well") with modern AI to help you train smarter and live better.</p>
@@ -61,7 +61,7 @@ export const EMAIL_TEMPLATES = {
   },
   
   assessment_complete: {
-    subject: 'Your EVZAIN Training Blueprint is Ready',
+    subject: 'Your EVZAIN Training Roadmap is Ready ζ',
     getBody: (data?: any) => `
 <!DOCTYPE html>
 <html>
@@ -86,9 +86,9 @@ export const EMAIL_TEMPLATES = {
     </div>
     
     <div class="content">
-      <h2 style="color: #0f172a; margin-top: 0;">Thank You for Completing Your Assessment</h2>
+      <h2 style="color: #0f172a; margin-top: 0;">Your Training Roadmap is Ready ζ</h2>
       
-      <p>We've analyzed your responses and we're excited to help you on your journey.</p>
+      <p>We've analyzed your responses and mapped out your next steps. Here's what we learned:</p>
       
       <div class="insight-box">
         <h3 style="margin-top: 0; color: #0891b2;">Your Profile</h3>
@@ -107,8 +107,8 @@ export const EMAIL_TEMPLATES = {
       
       <p>Your insights are invaluable in helping us build the best training intelligence platform for athletes like you.</p>
       
-      <a href="${(process.env.NEXT_PUBLIC_SITE_URL || 'https://evzain.com') + '/results'}" class="button">
-        View Your Results →
+      <a href="https://evzain.com/results" class="button">
+        View Your Roadmap ζ
       </a>
       
       <p style="margin-top: 30px; color: #64748b; font-style: italic;">
@@ -127,7 +127,7 @@ export const EMAIL_TEMPLATES = {
   },
 
   blueprint_delivery: {
-    subject: 'Your EVZAIN Blueprint – Personalized for You',
+    subject: 'Your EVZAIN Roadmap – Personalized for You ζ',
     getBody: (data?: any) => `
 <!DOCTYPE html>
 <html>
@@ -151,12 +151,12 @@ export const EMAIL_TEMPLATES = {
   <div class="container">
     <div class="header">
       <div class="logo">EVZA<span class="logo-accent">IN</span></div>
-      <div class="badge">Personalized Blueprint</div>
+      <div class="badge">Personalized Roadmap ζ</div>
     </div>
 
     <div class="card">
       <h2 style="margin-top: 0; color: #0f172a;">Here’s Your Next Move</h2>
-      <p>Based on your assessment, this blueprint is tuned for the way you train, think, and compete.</p>
+      <p>Based on your assessment, this roadmap is tuned for the way you train, think, and compete.</p>
 
       <div class="focus-box">
         <p style="margin: 0;"><strong>Sport:</strong> ${data?.sport || 'Your sport'}</p>
@@ -171,8 +171,8 @@ export const EMAIL_TEMPLATES = {
         <li>Recovery checkpoints to keep you healthy and explosive</li>
       </ul>
 
-      <p style="margin-top: 24px;">You can revisit your blueprint anytime:</p>
-      <a href="${(process.env.NEXT_PUBLIC_SITE_URL || 'https://evzain.com') + '/results'}" class="cta">Open Your Blueprint →</a>
+      <p style="margin-top: 24px;">You can revisit your roadmap anytime:</p>
+      <a href="https://evzain.com/results" class="cta">Open Your Roadmap ζ</a>
 
       <p style="margin-top: 24px;">We’re progressing the platform daily. Expect upgrades that connect wearables, coach-level tracking, and AI-guided adjustments that learn from every session.</p>
 

@@ -56,9 +56,36 @@ export default function ResultsPage() {
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Save to database
-    console.log('Email submitted:', email);
-    setEmailSubmitted(true);
+    
+    if (!email || !results) return;
+
+    try {
+      // Send roadmap delivery email
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: email,
+          type: 'blueprint_delivery',
+          data: {
+            sport: results.assessmentData.sport,
+            level: results.assessmentData.level,
+            primary_focus: results.profile.primaryFocus,
+          },
+        }),
+      });
+
+      if (response.ok) {
+        setEmailSubmitted(true);
+        // Save email to localStorage for future sessions
+        localStorage.setItem('userEmail', email);
+      } else {
+        alert('Failed to send roadmap. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error sending roadmap email:', error);
+      alert('Something went wrong. Please try again.');
+    }
   };
 
   if (loading) {
@@ -70,7 +97,7 @@ export default function ResultsPage() {
             <Target className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 text-cyan-400" />
           </div>
           <p className="text-white text-lg font-semibold">Analyzing your profile...</p>
-          <p className="text-slate-400 mt-2">Building your personalized training blueprint</p>
+          <p className="text-slate-400 mt-2">Building your personalized training roadmap ζ</p>
         </div>
       </div>
     );
