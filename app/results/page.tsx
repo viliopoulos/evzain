@@ -109,7 +109,7 @@ export default function ResultsPage() {
         <div className="max-w-lg text-center bg-slate-800/50 backdrop-blur-sm p-8 rounded-2xl border border-slate-700">
           <Target className="w-16 h-16 text-cyan-400 mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-white mb-4">No Assessment Found</h1>
-          <p className="mb-6 text-slate-300">Complete your assessment to get your personalized blueprint.</p>
+          <p className="mb-6 text-slate-300">Complete your assessment to get your personalized roadmap.</p>
           <a 
             href="/assessment" 
             className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-lg font-semibold hover:from-emerald-700 hover:to-emerald-800 transition-all shadow-lg"
@@ -179,7 +179,7 @@ export default function ResultsPage() {
                 {profile.segment.charAt(0).toUpperCase() + profile.segment.slice(1)} Athlete
               </div>
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">
-                Your Training Blueprint
+                Your Training Roadmap ζ
               </h1>
               <p className="text-white/90 text-xl">
                 {assessmentData.sport === 'other' ? assessmentData.sportOther : assessmentData.sport.charAt(0).toUpperCase() + assessmentData.sport.slice(1)} • {assessmentData.level}
@@ -315,7 +315,7 @@ export default function ResultsPage() {
       {/* Recommendations Section */}
       <div className="max-w-6xl mx-auto space-y-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">The Complete Blueprint</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Your Complete Roadmap</h2>
           <p className="text-slate-400 text-lg max-w-3xl mx-auto">
             Your personalized training plan, built on proven methodologies and elite athlete insights.
           </p>
@@ -408,7 +408,7 @@ export default function ResultsPage() {
               <BookOpen className="w-6 h-6 text-slate-400" />
               <div>
                 <h3 className="text-white font-semibold">View Research Foundation</h3>
-                <p className="text-slate-500 text-sm">Scientific studies and methodologies behind your blueprint</p>
+                <p className="text-slate-500 text-sm">Scientific studies and methodologies behind your roadmap</p>
               </div>
             </div>
             <ChevronRight className={`w-5 h-5 text-slate-400 transition-transform ${showResearch ? 'rotate-90' : ''}`} />
@@ -454,14 +454,14 @@ export default function ResultsPage() {
       {!emailSubmitted ? (
         <div className="max-w-2xl mx-auto mt-12 bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700 p-8 text-center">
           <Mail className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
-          <h3 className="text-2xl font-bold text-white mb-2">Save Your Blueprint</h3>
+          <h3 className="text-2xl font-bold text-white mb-2">Save Your Roadmap ζ</h3>
           <p className="text-slate-300 mb-6">Get this sent to your email + early access to EVZAIN when we launch</p>
           <form onSubmit={handleEmailSubmit} className="flex flex-col sm:flex-row gap-3">
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="your@email.com"
+              placeholder="Enter your email"
               className="flex-1 px-4 py-3 rounded-xl bg-slate-900/50 border border-slate-600 text-white placeholder:text-slate-500 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
               required
             />
@@ -469,7 +469,7 @@ export default function ResultsPage() {
               type="submit"
               className="px-8 py-3 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-xl font-semibold hover:from-emerald-700 hover:to-emerald-800 transition-all shadow-lg"
             >
-              Send My Blueprint
+              Send My Roadmap ζ
             </button>
           </form>
         </div>
@@ -481,7 +481,7 @@ export default function ResultsPage() {
             </svg>
           </div>
           <h3 className="text-2xl font-bold text-white mb-2">Check Your Inbox!</h3>
-          <p className="text-slate-300">We've sent your complete blueprint to {email}</p>
+          <p className="text-slate-300">We've sent your complete roadmap to {email}</p>
         </div>
       )}
 

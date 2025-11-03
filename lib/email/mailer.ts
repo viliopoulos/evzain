@@ -53,38 +53,51 @@ export async function sendTransactionalEmail({ to, type, data }: SendTransaction
   const html = template.getBody(data);
   const subject = template.subject;
 
-  const response = await resendClient.emails.send({
-    from: resendFromEmail,
-    to: normalizedEmail,
-    subject,
-    html,
-  });
+  try {
+    const response = await resendClient.emails.send({
+      from: resendFromEmail,
+      to: normalizedEmail,
+      subject,
+      html,
+    });
 
-  const supabase = getSupabaseClient();
-  if (supabase) {
-    try {
-      await supabase
-        .from('email_campaign_log')
-        .insert([
-          {
-            recipient_email: normalizedEmail,
-            campaign_type: type,
-            subject,
-            body: html,
-            status: 'sent',
-          },
-        ]);
+    console.log('✅ Email sent via Resend:', { to: normalizedEmail, type, resendId: response.data?.id });
 
-      if (type === 'waitlist_welcome') {
+    const supabase = getSupabaseClient();
+    if (supabase) {
+      try {
         await supabase
-          .from('waitlist_signups')
-          .update({ email_sent: true, email_sent_at: new Date().toISOString() })
-          .eq('email', normalizedEmail);
-      }
-    } catch (error) {
-      console.error('Failed to log transactional email send:', error);
-    }
-  }
+          .from('email_campaign_log')
+          .insert([
+            {
+              recipient_email: normalizedEmail,
+              campaign_type: type,
+              subject,
+              body: html,
+              status: 'sent',
+              sent_at: new Date().toISOString(),
+            },
+          ]);
 
-  return response;
+        if (type === 'waitlist_welcome') {
+          await supabase
+            .from('waitlist_signups')
+            .update({ email_sent: true, email_sent_at: new Date().toISOString() })
+            .eq('email', normalizedEmail);
+        }
+      } catch (error) {
+        console.error('Failed to log email to Supabase (email still sent):', error);
+      }
+    }
+
+    return response;
+  } catch (error: any) {
+    console.error('❌ Resend email send failed:', {
+      to: normalizedEmail,
+      type,
+      error: error.message,
+      statusCode: error.statusCode,
+    });
+    throw error;
+  }
 }

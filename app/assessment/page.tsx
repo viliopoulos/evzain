@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { ArrowRight, ArrowLeft, Sparkles, Target } from 'lucide-react';
 import Link from 'next/link';
-import BetaGuard from './beta-guard';
 
 interface AssessmentData {
   sport: string;
@@ -29,16 +28,7 @@ interface AssessmentData {
 }
 
 export default function Assessment() {
-  const [hasAccess, setHasAccess] = useState(false);
   const [step, setStep] = useState(0);
-
-  // Check for beta access on mount
-  useEffect(() => {
-    const betaAccess = localStorage.getItem('betaAccess');
-    if (betaAccess === 'true') {
-      setHasAccess(true);
-    }
-  }, []);
 
   // Handle browser back button
   useEffect(() => {
@@ -717,10 +707,6 @@ export default function Assessment() {
   ];
 
   const currentQuestion = questions[step];
-
-  if (!hasAccess) {
-    return <BetaGuard onAccessGranted={() => setHasAccess(true)} />;
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
