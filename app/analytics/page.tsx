@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { BarChart3, Users, Mail, TrendingUp, Activity, Target } from 'lucide-react';
+import AuthGuard from './auth-guard';
 
 interface AnalyticsData {
   waitlist: {
@@ -29,13 +30,23 @@ interface AnalyticsData {
 }
 
 export default function Analytics() {
+  const [hasAccess, setHasAccess] = useState(false);
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    fetchAnalytics();
+    const access = localStorage.getItem('analyticsAccess');
+    if (access === 'true') {
+      setHasAccess(true);
+    }
   }, []);
+
+  useEffect(() => {
+    if (hasAccess) {
+      fetchAnalytics();
+    }
+  }, [hasAccess]);
 
   const fetchAnalytics = async () => {
     try {
@@ -52,6 +63,10 @@ export default function Analytics() {
       setLoading(false);
     }
   };
+
+  if (!hasAccess) {
+    return <AuthGuard onAccessGranted={() => setHasAccess(true)} />;
+  }
 
   if (loading) {
     return (
