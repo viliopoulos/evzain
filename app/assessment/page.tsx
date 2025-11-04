@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { ArrowRight, ArrowLeft, Sparkles, Target } from 'lucide-react';
 import Link from 'next/link';
-import { ZetaSymbol } from '@/components/ZetaSymbol';
+import { EvzainLogo } from '@/components/EvzainLogo';
 
 interface AssessmentData {
   sport: string;
@@ -760,9 +760,7 @@ export default function Assessment() {
 
       {/* Header with Clickable Logo */}
       <Link href="/" className="fixed top-4 left-6 z-40 cursor-pointer hover:opacity-80 transition-opacity">
-        <h1 className="text-2xl text-white font-bold tracking-tight flex items-center" style={{ gap: '0.1rem' }}>
-          <span>EV</span><ZetaSymbol size={28} /><span>AIN</span>
-        </h1>
+        <EvzainLogo variant="compact" height={32} />
       </Link>
 
       {/* Step Counter */}

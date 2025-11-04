@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ZetaSymbol } from '@/components/ZetaSymbol';
+import { EvzainLogo } from '@/components/EvzainLogo';
 import { Mail, ArrowRight } from 'lucide-react';
 
 export default function Home() {
@@ -81,9 +81,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="flex items-center justify-between mb-6">
             <a href="/" className="hover:opacity-80 transition-opacity">
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight flex items-center" style={{ gap: '0.1rem' }}>
-                <span>EV</span><ZetaSymbol size={50} /><span>AIN</span>
-              </h1>
+              <EvzainLogo variant="compact" height={50} />
             </a>
             <div className="flex items-center gap-3">
               <Link 
@@ -94,16 +92,21 @@ export default function Home() {
               </Link>
               <Link 
                 href="/origins"
-                className="cursor-pointer hover:opacity-100 transition-opacity opacity-30"
+                className="cursor-pointer hover:opacity-100 transition-opacity opacity-50 hover:opacity-80"
                 title="Our Origins"
               >
-                <ZetaSymbol size={20} />
+                <EvzainLogo variant="compact" height={24} />
               </Link>
             </div>
           </div>
-          <h2 className="text-2xl md:text-3xl font-light max-w-3xl">
-            Train Smarter. Live Better. Achieve More.
-          </h2>
+          <div className="max-w-3xl">
+            <p className="text-lg text-emerald-300 mb-2 font-light italic">
+              The Science of Living Well
+            </p>
+            <h2 className="text-2xl md:text-3xl font-light">
+              Train Smarter. Live Better. Achieve More.
+            </h2>
+          </div>
         </div>
       </header>
 
