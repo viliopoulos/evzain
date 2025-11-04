@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { ArrowRight, ArrowLeft, Sparkles, Target } from 'lucide-react';
 import Link from 'next/link';
-import { EvzainBrandLogo } from '@/components/EvzainBrandLogo';
 
 interface AssessmentData {
   sport: string;
@@ -713,6 +712,12 @@ export default function Assessment() {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       <style jsx>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&display=swap');
+        .logo-in {
+          font-family: 'Playfair Display', serif;
+          font-style: italic;
+          font-weight: 700;
+          color: #059669;
+        }
         .logo-zeta {
           font-family: 'Times New Roman', serif;
           font-size: 32px;
@@ -760,7 +765,9 @@ export default function Assessment() {
 
       {/* Header with Clickable Logo */}
       <Link href="/" className="fixed top-4 left-6 z-40 cursor-pointer hover:opacity-80 transition-opacity">
-        <EvzainBrandLogo height={36} />
+        <h1 className="text-2xl text-white font-light tracking-tight">
+          EVZA<span className="logo-in">IN</span>
+        </h1>
       </Link>
 
       {/* Step Counter */}

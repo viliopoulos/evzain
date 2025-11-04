@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { EvzainBrandLogo } from '@/components/EvzainBrandLogo';
 import { Mail, ArrowRight } from 'lucide-react';
 
 export default function Home() {
@@ -46,6 +45,13 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-cyan-50">
       <style jsx>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&display=swap');
+        .logo-in {
+          font-family: 'Playfair Display', serif;
+          font-style: italic;
+          font-weight: 700;
+          color: #10b981;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&display=swap');
         .logo-zeta {
           font-family: 'Times New Roman', serif;
           font-size: 56px;
@@ -81,7 +87,9 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="flex items-center justify-between mb-6">
             <a href="/" className="hover:opacity-80 transition-opacity">
-              <EvzainBrandLogo height={60} />
+              <h1 className="text-4xl md:text-5xl font-light tracking-tight">
+                EVZA<span className="logo-in">IN</span>
+              </h1>
             </a>
             <div className="flex items-center gap-3">
               <Link 
@@ -92,10 +100,10 @@ export default function Home() {
               </Link>
               <Link 
                 href="/origins"
-                className="cursor-pointer hover:opacity-100 transition-opacity opacity-50 hover:opacity-80"
+                className="zeta-watermark text-2xl cursor-pointer hover:opacity-100 transition-opacity"
                 title="Our Origins"
               >
-                <EvzainBrandLogo height={28} />
+                ζ
               </Link>
             </div>
           </div>

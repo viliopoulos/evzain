@@ -2,7 +2,6 @@
 
 import { ArrowLeft, Mail } from 'lucide-react';
 import { useState } from 'react';
-import { EvzainBrandLogo } from '@/components/EvzainBrandLogo';
 
 export default function Origins() {
   const [email, setEmail] = useState('');
@@ -18,6 +17,12 @@ export default function Origins() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-cyan-50">
       <style jsx>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&display=swap');
+        .logo-in {
+          font-family: 'Playfair Display', serif;
+          font-style: italic;
+          font-weight: 700;
+          color: #10b981;
+        }
         .logo-zeta {
           font-family: 'Times New Roman', serif;
           font-size: 56px;
@@ -44,7 +49,9 @@ export default function Origins() {
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="flex items-center justify-between mb-6">
             <a href="/" className="hover:opacity-80 transition-opacity">
-              <EvzainBrandLogo height={60} />
+              <h1 className="text-4xl md:text-5xl font-light tracking-tight">
+                EVZA<span className="logo-in">IN</span>
+              </h1>
             </a>
             <div className="flex items-center gap-3">
               <div className="text-right text-sm text-emerald-300">

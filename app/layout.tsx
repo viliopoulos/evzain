@@ -16,6 +16,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "EVZAIN - Hyper-Specific Training Intelligence",
   description: "Data-driven training intelligence for athletes. Sport-specific recommendations based on your level, goals, and training hours.",
+  icons: {
+    icon: '/zeta-favicon.svg',
+  },
 };
 
 export default function RootLayout({

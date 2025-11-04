@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { ArrowRight, Target, TrendingUp, Brain, Heart, Award, Clock, Mail, Dumbbell, Activity, BookOpen, Zap, Play, Watch, ChevronRight, Check } from 'lucide-react';
-import { EvzainBrandLogo } from '@/components/EvzainBrandLogo';
 import { generateRecommendations } from '@/lib/recommendation-generator';
 import { AssessmentData, AthleteProfile, TrainingRecommendation } from '@/lib/types';
 import { getExercisesForProfile, Exercise } from '@/lib/elite-exercises';
@@ -139,6 +138,13 @@ export default function ResultsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-12 px-4 sm:px-6 lg:px-8">
       <style jsx>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&display=swap');
+        .logo-in {
+          font-family: 'Playfair Display', serif;
+          font-style: italic;
+          font-weight: 700;
+          color: #059669;
+        }
         .logo-zeta {
           font-family: 'Times New Roman', serif;
           font-size: 42px;
@@ -163,7 +169,9 @@ export default function ResultsPage() {
       {/* Header */}
       <div className="max-w-6xl mx-auto mb-12">
         <a href="/" className="inline-flex items-center text-white hover:text-cyan-400 transition-colors">
-          <EvzainBrandLogo height={48} />
+          <h1 className="text-3xl font-light tracking-tight">
+            EVZA<span className="logo-in">IN</span>
+          </h1>
         </a>
       </div>
 
