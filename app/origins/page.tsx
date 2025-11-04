@@ -2,7 +2,7 @@
 
 import { ArrowLeft, Mail } from 'lucide-react';
 import { useState } from 'react';
-import { EvzainLogo } from '@/components/EvzainLogo';
+import { BrandLogo } from '@/components/BrandLogo';
 
 export default function Origins() {
   const [email, setEmail] = useState('');
@@ -44,7 +44,7 @@ export default function Origins() {
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="flex items-center justify-between mb-6">
             <a href="/" className="hover:opacity-80 transition-opacity">
-              <EvzainLogo variant="compact" height={50} />
+              <BrandLogo height={50} />
             </a>
             <div className="flex items-center gap-3">
               <div className="text-right text-sm text-emerald-300">

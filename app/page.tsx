@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { EvzainLogo } from '@/components/EvzainLogo';
+import { BrandLogo } from '@/components/BrandLogo';
 import { Mail, ArrowRight } from 'lucide-react';
 
 export default function Home() {
@@ -81,7 +81,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="flex items-center justify-between mb-6">
             <a href="/" className="hover:opacity-80 transition-opacity">
-              <EvzainLogo variant="compact" height={50} />
+              <BrandLogo height={50} />
             </a>
             <div className="flex items-center gap-3">
               <Link 
@@ -95,7 +95,7 @@ export default function Home() {
                 className="cursor-pointer hover:opacity-100 transition-opacity opacity-50 hover:opacity-80"
                 title="Our Origins"
               >
-                <EvzainLogo variant="compact" height={24} />
+                <BrandLogo height={24} />
               </Link>
             </div>
           </div>
