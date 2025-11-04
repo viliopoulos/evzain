@@ -839,7 +839,7 @@ export default function Assessment() {
                       : 'bg-slate-200 text-slate-400 cursor-not-allowed'
                   }`}
                 >
-                  Get My Blueprint
+                  Achieve My Goals
                   <Target className="w-5 h-5" />
                 </button>
               )}

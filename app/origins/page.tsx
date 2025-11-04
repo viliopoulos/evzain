@@ -104,7 +104,7 @@ export default function Origins() {
         <div className="bg-gradient-to-br from-cyan-50 to-slate-50 rounded-2xl border border-cyan-100 p-8 md:p-12 mb-12">
           <h3 className="text-2xl font-semibold text-slate-900 mb-6">Our Research Foundation</h3>
           <p className="text-slate-600 mb-6">
-            Every recommendation is built on three pillars of evidence:
+            Every recommendation is built on four pillars of evidence:
           </p>
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-white rounded-lg p-6 shadow-sm">

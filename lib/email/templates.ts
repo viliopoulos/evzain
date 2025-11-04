@@ -1,6 +1,6 @@
 export const EMAIL_TEMPLATES = {
   waitlist_welcome: {
-    subject: 'Welcome to the EVZAIN Movement ζ',
+    subject: 'Welcome to the EVZAIN Movement',
     getBody: (data?: any) => `
 <!DOCTYPE html>
 <html>
@@ -40,7 +40,7 @@ export const EMAIL_TEMPLATES = {
       <p>In the meantime, take our 5-minute assessment to help us understand your training journey better:</p>
       
       <a href="https://evzain.com/assessment" class="button">
-        Take the Assessment ζ
+        Take the Assessment
       </a>
       
       <p style="margin-top: 30px;">Built by athletes who competed at the highest level, EVZAIN blends ancient wisdom (εὖ ζήν - "living well") with modern AI to help you train smarter and live better.</p>
@@ -61,7 +61,7 @@ export const EMAIL_TEMPLATES = {
   },
   
   assessment_complete: {
-    subject: 'Your EVZAIN Training Roadmap is Ready ζ',
+    subject: 'Your EVZAIN Training Roadmap is Ready',
     getBody: (data?: any) => `
 <!DOCTYPE html>
 <html>
@@ -86,7 +86,7 @@ export const EMAIL_TEMPLATES = {
     </div>
     
     <div class="content">
-      <h2 style="color: #0f172a; margin-top: 0;">Your Training Roadmap is Ready ζ</h2>
+      <h2 style="color: #0f172a; margin-top: 0;">Your Training Roadmap is Ready</h2>
       
       <p>We've analyzed your responses and mapped out your next steps. Here's what we learned:</p>
       
@@ -108,7 +108,7 @@ export const EMAIL_TEMPLATES = {
       <p>Your insights are invaluable in helping us build the best training intelligence platform for athletes like you.</p>
       
       <a href="https://evzain.com/results" class="button">
-        View Your Roadmap ζ
+        View Your Roadmap
       </a>
       
       <p style="margin-top: 30px; color: #64748b; font-style: italic;">
@@ -127,7 +127,7 @@ export const EMAIL_TEMPLATES = {
   },
 
   blueprint_delivery: {
-    subject: 'Your EVZAIN Roadmap – Personalized for You ζ',
+    subject: 'Your EVZAIN Roadmap – Personalized for You',
     getBody: (data?: any) => `
 <!DOCTYPE html>
 <html>
@@ -151,7 +151,7 @@ export const EMAIL_TEMPLATES = {
   <div class="container">
     <div class="header">
       <div class="logo">EVZA<span class="logo-accent">IN</span></div>
-      <div class="badge">Personalized Roadmap ζ</div>
+      <div class="badge">Personalized Roadmap</div>
     </div>
 
     <div class="card">
@@ -172,7 +172,7 @@ export const EMAIL_TEMPLATES = {
       </ul>
 
       <p style="margin-top: 24px;">You can revisit your roadmap anytime:</p>
-      <a href="https://evzain.com/results" class="cta">Open Your Roadmap ζ</a>
+      <a href="https://evzain.com/results" class="cta">Save My Roadmap</a>
 
       <p style="margin-top: 24px;">We’re progressing the platform daily. Expect upgrades that connect wearables, coach-level tracking, and AI-guided adjustments that learn from every session.</p>
 

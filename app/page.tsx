@@ -45,11 +45,11 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-cyan-50">
       <style jsx>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&display=swap');
-        .logo-in {
-          font-family: 'Playfair Display', serif;
-          font-style: italic;
-          font-weight: 700;
-          color: #10b981;
+        .logo-zeta {
+          font-family: 'Times New Roman', serif;
+          font-size: 56px;
+          color: #14B8A6;
+          font-weight: 400;
         }
         .zeta-watermark {
           font-family: 'Times New Roman', serif;
@@ -80,21 +80,24 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="flex items-center justify-between mb-6">
             <a href="/" className="hover:opacity-80 transition-opacity">
-              <h1 className="text-4xl md:text-5xl font-light tracking-tight">
-                EVZA<span className="logo-in">IN</span>
+              <h1 className="text-4xl md:text-5xl font-bold tracking-tight flex items-center gap-1">
+                <span>EV</span><span className="logo-zeta">ζ</span><span>AIN</span>
               </h1>
             </a>
             <div className="flex items-center gap-3">
-              <div className="text-right text-sm text-emerald-300">
-                Your AI Performance Partner
-              </div>
-              <a 
+              <Link 
                 href="/origins"
-                className="zeta-watermark text-2xl cursor-pointer"
+                className="text-right text-base md:text-lg text-emerald-300 hover:text-emerald-200 transition-colors"
+              >
+                Your AI Performance Partner
+              </Link>
+              <Link 
+                href="/origins"
+                className="zeta-watermark text-2xl cursor-pointer hover:opacity-100 transition-opacity"
                 title="Our Origins"
               >
                 ζ
-              </a>
+              </Link>
             </div>
           </div>
           <h2 className="text-2xl md:text-3xl font-light max-w-3xl">
@@ -141,7 +144,7 @@ export default function Home() {
             <div className="relative bg-white rounded-xl shadow-lg p-8 border-l-4 border-emerald-500 overflow-hidden">
               <div className="zeta-bg">ζ</div>
               <h3 className="relative text-2xl font-semibold text-slate-900 mb-4">
-                Join the ζ Revolution
+                Join the Revolution
               </h3>
               <p className="relative text-slate-700 leading-relaxed mb-4">
                 <span className="font-semibold text-emerald-600">EVZAIN</span> is inspired by 
