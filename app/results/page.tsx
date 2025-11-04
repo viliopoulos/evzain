@@ -97,7 +97,7 @@ export default function ResultsPage() {
             <Target className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 text-cyan-400" />
           </div>
           <p className="text-white text-lg font-semibold">Analyzing your profile...</p>
-          <p className="text-slate-400 mt-2">Building your personalized training roadmap ζ</p>
+          <p className="text-slate-400 mt-2">Building your personalized training roadmap</p>
         </div>
       </div>
     );
@@ -138,12 +138,12 @@ export default function ResultsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-12 px-4 sm:px-6 lg:px-8">
       <style jsx>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&display=swap');
-        .logo-in {
-          font-family: 'Playfair Display', serif;
-          font-style: italic;
-          font-weight: 700;
-          color: #059669;
+        .logo-zeta {
+          font-family: 'Times New Roman', serif;
+          font-size: 42px;
+          color: #14B8A6;
+          font-weight: 400;
+          line-height: 1;
         }
         .zeta-mark {
           font-family: 'Times New Roman', serif;
@@ -162,8 +162,8 @@ export default function ResultsPage() {
       {/* Header */}
       <div className="max-w-6xl mx-auto mb-12">
         <a href="/" className="inline-flex items-center text-white hover:text-cyan-400 transition-colors">
-          <h1 className="text-3xl font-light tracking-tight">
-            EVZA<span className="logo-in">IN</span>
+          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-1">
+            <span>EV</span><span className="logo-zeta">ζ</span><span>AIN</span>
           </h1>
         </a>
       </div>
@@ -179,7 +179,7 @@ export default function ResultsPage() {
                 {profile.segment.charAt(0).toUpperCase() + profile.segment.slice(1)} Athlete
               </div>
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">
-                Your Training Roadmap ζ
+                Your Training Roadmap
               </h1>
               <p className="text-white/90 text-xl">
                 {assessmentData.sport === 'other' ? assessmentData.sportOther : assessmentData.sport.charAt(0).toUpperCase() + assessmentData.sport.slice(1)} • {assessmentData.level}
@@ -454,7 +454,7 @@ export default function ResultsPage() {
       {!emailSubmitted ? (
         <div className="max-w-2xl mx-auto mt-12 bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700 p-8 text-center">
           <Mail className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
-          <h3 className="text-2xl font-bold text-white mb-2">Save Your Roadmap ζ</h3>
+          <h3 className="text-2xl font-bold text-white mb-2">Save Your Roadmap</h3>
           <p className="text-slate-300 mb-6">Get this sent to your email + early access to EVZAIN when we launch</p>
           <form onSubmit={handleEmailSubmit} className="flex flex-col sm:flex-row gap-3">
             <input
@@ -469,7 +469,7 @@ export default function ResultsPage() {
               type="submit"
               className="px-8 py-3 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-xl font-semibold hover:from-emerald-700 hover:to-emerald-800 transition-all shadow-lg"
             >
-              Send My Roadmap ζ
+              Send My Roadmap
             </button>
           </form>
         </div>
