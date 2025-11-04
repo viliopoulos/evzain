@@ -12,6 +12,9 @@ type ResendEmailReceivedEvent = {
     to: string[];
     from: string;
     subject?: string;
+    html?: string;
+    text?: string;
+    attachments?: any[];
   };
 };
 
@@ -49,60 +52,18 @@ export async function POST(request: Request) {
       subject: event.data?.subject,
     });
 
-    const [emailResponse, attachmentsResponse] = await Promise.all([
-      resend.emails.receiving.get(emailId),
-      resend.attachments.receiving.list({ emailId }),
-    ]);
-
-    const emailData = emailResponse.data;
-    const attachmentsRaw = attachmentsResponse.data;
-    const attachmentsArray = Array.isArray((attachmentsRaw as any)?.data)
-      ? (attachmentsRaw as any).data
-      : Array.isArray(attachmentsRaw)
-        ? attachmentsRaw
-        : [];
-
-    const preparedAttachments = await Promise.all(
-      attachmentsArray.map(async (attachment: any) => {
-        const downloadUrl = attachment.download_url;
-        const filename = attachment.filename ?? 'attachment';
-        const contentType = attachment.content_type ?? 'application/octet-stream';
-
-        try {
-          const response = await fetch(downloadUrl);
-          const buffer = Buffer.from(await response.arrayBuffer());
-
-          return {
-            filename,
-            content: buffer.toString('base64'),
-            contentType,
-          };
-        } catch (error) {
-          console.error('Failed to download attachment from Resend', {
-            filename,
-            downloadUrl,
-            error,
-          });
-          return null;
-        }
-      })
-    );
-
-    const sanitizedAttachments = preparedAttachments.filter(
-      (attachment): attachment is { filename: string; content: string; contentType: string } =>
-        attachment !== null
-    );
-
-    const htmlBody = emailData?.html ?? (emailData?.text ? `<pre>${emailData.text}</pre>` : '<p>(no content)</p>');
-    const textBody = emailData?.text ?? emailData?.html?.replace(/<[^>]+>/g, '') ?? '';
+    // Use data directly from webhook payload
+    const htmlBody = event.data?.html ?? (event.data?.text ? `<pre>${event.data.text}</pre>` : '<p>(no content)</p>');
+    const textBody = event.data?.text ?? event.data?.html?.replace(/<[^>]+>/g, '') ?? '';
+    const attachments = event.data?.attachments ?? [];
 
     await resend.emails.send({
       from: 'EVZAIN <performance@evzain.com>',
       to: [forwardToEmail],
-      subject: emailData?.subject ?? event.data.subject ?? '(no subject)',
+      subject: event.data.subject ?? '(no subject)',
       html: htmlBody,
       text: textBody,
-      attachments: sanitizedAttachments.length ? sanitizedAttachments : undefined,
+      attachments: attachments.length ? attachments : undefined,
     });
 
     console.log('Forwarded inbound email from Resend', {
