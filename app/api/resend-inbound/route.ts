@@ -90,33 +90,13 @@ export async function POST(request: Request) {
     const senderName = fromMatch[1]?.trim() || event.data.from.split('@')[0];
     const senderEmail = fromMatch[2] || event.data.from;
 
-    // Add original sender info to email body
-    const enrichedHtml = `
-      <div style="background: #f3f4f6; padding: 12px; margin-bottom: 16px; border-left: 4px solid #10b981; font-family: sans-serif;">
-        <strong>From:</strong> ${event.data.from}<br>
-        <strong>To:</strong> ${event.data.to.join(', ')}<br>
-        <strong>Reply to this email to respond to ${senderName}</strong>
-      </div>
-      ${htmlBody}
-    `;
-
-    const enrichedText = `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-From: ${event.data.from}
-To: ${event.data.to.join(', ')}
-Reply to this email to respond to ${senderName}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-${textBody}
-    `;
-
     await resend.emails.send({
-      from: 'EVZAIN Performance <performance@evzain.com>',
+      from: `${senderName} <performance@evzain.com>`,
       to: [forwardToEmail],
       replyTo: senderEmail,
-      subject: `[${senderName}] ${event.data.subject ?? '(no subject)'}`,
-      html: enrichedHtml,
-      text: enrichedText,
+      subject: event.data.subject ?? '(no subject)',
+      html: htmlBody,
+      text: textBody,
       attachments: validAttachments.length > 0 ? validAttachments : undefined,
     });
 
