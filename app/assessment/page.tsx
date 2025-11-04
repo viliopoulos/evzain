@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { ArrowRight, ArrowLeft, Sparkles, Target } from 'lucide-react';
 import Link from 'next/link';
+import ZetaLogo from '@/components/ZetaLogo';
 
 interface AssessmentData {
   sport: string;
@@ -759,8 +760,8 @@ export default function Assessment() {
 
       {/* Header with Clickable Logo */}
       <Link href="/" className="fixed top-4 left-6 z-40 cursor-pointer hover:opacity-80 transition-opacity">
-        <h1 className="text-2xl text-white font-bold tracking-tight flex items-center gap-1">
-          <span>EV</span><span className="logo-zeta">ζ</span><span>AIN</span>
+        <h1 className="text-2xl text-white font-bold tracking-tight flex items-center gap-0">
+          <span>EV</span><ZetaLogo size={32} /><span>AIN</span>
         </h1>
       </Link>
 

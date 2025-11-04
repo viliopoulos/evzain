@@ -304,7 +304,7 @@ export const RECOVERY_EXERCISES = {
   }
 };
 
-// Helper function to get exercises by sport and goal
+// Helper function to get exercises by sport and goal - ALWAYS returns exactly 3 exercises
 export function getExercisesForProfile(sport: string, goal: string, level: string): Exercise[] {
   const exercises: Exercise[] = [];
   
@@ -318,34 +318,77 @@ export function getExercisesForProfile(sport: string, goal: string, level: strin
   };
 
   const sportLib = sportExercises[sport];
-  if (!sportLib) return exercises;
-
-  // Goal-based exercise selection
-  if (goal === 'skills') {
-    // Add skill-specific exercises
-    if (sport === 'tennis') {
-      exercises.push(sportLib.TARGET_PRACTICE, sportLib.EXPLOSIVE_FOOTWORK);
-    } else if (sport === 'basketball') {
-      exercises.push(sportLib.MAMBA_SHOOTING, sportLib.TWO_BALL_HANDLING);
-    } else if (sport === 'soccer') {
-      exercises.push(sportLib.WALL_PASSING, sportLib.CONE_WEAVING);
-    } else if (sport === 'waterpolo') {
-      exercises.push(sportLib.EGGBEATER_HOLDS, sportLib.CORNER_POCKET_SHOOTING);
-    } else if (sport === 'football') {
-      exercises.push(sportLib.ROUTE_PRECISION, sportLib.QUARTERBACK_DROPS);
-    }
+  
+  // Default fallback exercises if sport not found
+  if (!sportLib) {
+    exercises.push(
+      MENTAL_EXERCISES.CHAMPIONSHIP_VISUALIZATION,
+      MENTAL_EXERCISES.CONSEQUENCES_PRACTICE,
+      RECOVERY_EXERCISES.LEBRON_RECOVERY_PROTOCOL
+    );
+    return exercises;
   }
 
-  // Add mental exercises if needed
-  if (goal === 'compete' || goal === 'pro') {
+  // Goal-based exercise selection - ALWAYS add exactly 3
+  if (goal === 'skills') {
+    if (sport === 'tennis') {
+      exercises.push(
+        sportLib.TARGET_PRACTICE, 
+        sportLib.EXPLOSIVE_FOOTWORK,
+        sportLib.BETWEEN_POINT_ROUTINE
+      );
+    } else if (sport === 'basketball') {
+      exercises.push(
+        sportLib.MAMBA_SHOOTING, 
+        sportLib.TWO_BALL_HANDLING,
+        sportLib.DEFENSIVE_SLIDES
+      );
+    } else if (sport === 'soccer') {
+      exercises.push(
+        sportLib.WALL_PASSING, 
+        sportLib.CONE_WEAVING,
+        sportLib.FINISHING_UNDER_PRESSURE
+      );
+    } else if (sport === 'waterpolo') {
+      exercises.push(
+        sportLib.EGGBEATER_HOLDS, 
+        sportLib.CORNER_POCKET_SHOOTING,
+        sportLib.COUNTER_ATTACK_TRANSITIONS
+      );
+    } else if (sport === 'football') {
+      exercises.push(
+        sportLib.ROUTE_PRECISION, 
+        sportLib.QUARTERBACK_DROPS,
+        sportLib.TACKLING_FORM
+      );
+    }
+  } else if (goal === 'compete' || goal === 'pro') {
+    // Competition focus: 2 sport-specific + 1 mental
+    const sportKeys = Object.keys(sportLib);
+    if (sportKeys.length >= 2) {
+      exercises.push(sportLib[sportKeys[0]], sportLib[sportKeys[1]]);
+    }
     exercises.push(MENTAL_EXERCISES.CHAMPIONSHIP_VISUALIZATION);
+  } else if (goal === 'comeback') {
+    // Injury recovery: 2 sport-specific + 1 recovery
+    const sportKeys = Object.keys(sportLib);
+    if (sportKeys.length >= 2) {
+      exercises.push(sportLib[sportKeys[0]], sportLib[sportKeys[1]]);
+    }
+    exercises.push(RECOVERY_EXERCISES.LEBRON_RECOVERY_PROTOCOL);
+  } else {
+    // Default: 2 sport-specific + 1 mental
+    const sportKeys = Object.keys(sportLib);
+    if (sportKeys.length >= 2) {
+      exercises.push(sportLib[sportKeys[0]], sportLib[sportKeys[1]]);
+    }
     exercises.push(MENTAL_EXERCISES.CONSEQUENCES_PRACTICE);
   }
 
-  // Add recovery for high-level athletes
-  if (level === 'Professional' || level === 'Semi-Pro' || level === 'College') {
+  // GUARANTEE exactly 3 exercises
+  while (exercises.length < 3) {
     exercises.push(RECOVERY_EXERCISES.LEBRON_RECOVERY_PROTOCOL);
   }
-
-  return exercises;
+  
+  return exercises.slice(0, 3); // Always return exactly 3
 }

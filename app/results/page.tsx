@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { ArrowRight, Target, TrendingUp, Brain, Heart, Award, Clock, Mail, Dumbbell, Activity, BookOpen, Zap, Play, Watch, ChevronRight, Check } from 'lucide-react';
+import ZetaLogo from '@/components/ZetaLogo';
 import { generateRecommendations } from '@/lib/recommendation-generator';
 import { AssessmentData, AthleteProfile, TrainingRecommendation } from '@/lib/types';
 import { getExercisesForProfile, Exercise } from '@/lib/elite-exercises';
@@ -162,8 +163,8 @@ export default function ResultsPage() {
       {/* Header */}
       <div className="max-w-6xl mx-auto mb-12">
         <a href="/" className="inline-flex items-center text-white hover:text-cyan-400 transition-colors">
-          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-1">
-            <span>EV</span><span className="logo-zeta">ζ</span><span>AIN</span>
+          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-0">
+            <span>EV</span><ZetaLogo size={42} /><span>AIN</span>
           </h1>
         </a>
       </div>

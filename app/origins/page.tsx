@@ -2,6 +2,7 @@
 
 import { ArrowLeft, Mail } from 'lucide-react';
 import { useState } from 'react';
+import ZetaLogo from '@/components/ZetaLogo';
 
 export default function Origins() {
   const [email, setEmail] = useState('');
@@ -43,8 +44,8 @@ export default function Origins() {
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="flex items-center justify-between mb-6">
             <a href="/" className="hover:opacity-80 transition-opacity">
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight flex items-center gap-1">
-                <span>EV</span><span className="logo-zeta">ζ</span><span>AIN</span>
+              <h1 className="text-4xl md:text-5xl font-bold tracking-tight flex items-center gap-0">
+                <span>EV</span><ZetaLogo size={56} /><span>AIN</span>
               </h1>
             </a>
             <div className="flex items-center gap-3">
