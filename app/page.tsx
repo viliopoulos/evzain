@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import ZetaLogo from '@/components/ZetaLogo';
+import { ZetaSymbol } from '@/components/ZetaSymbol';
 import { Mail, ArrowRight } from 'lucide-react';
 
 export default function Home() {
@@ -81,8 +81,8 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="flex items-center justify-between mb-6">
             <a href="/" className="hover:opacity-80 transition-opacity">
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight flex items-center gap-0">
-                <span>EV</span><ZetaLogo size={56} /><span>AIN</span>
+              <h1 className="text-4xl md:text-5xl font-bold tracking-tight flex items-center" style={{ gap: '0.1rem' }}>
+                <span>EV</span><ZetaSymbol size={50} /><span>AIN</span>
               </h1>
             </a>
             <div className="flex items-center gap-3">
@@ -97,7 +97,7 @@ export default function Home() {
                 className="cursor-pointer hover:opacity-100 transition-opacity opacity-30"
                 title="Our Origins"
               >
-                <ZetaLogo size={24} />
+                <ZetaSymbol size={20} />
               </Link>
             </div>
           </div>
