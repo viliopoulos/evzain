@@ -85,16 +85,38 @@ export async function POST(request: Request) {
 
     const validAttachments = preparedAttachments.filter((a: { filename: string; content: string } | null): a is { filename: string; content: string } => a !== null);
 
-    // Extract sender name from email address
-    const senderName = event.data.from.split('@')[0].split('<')[0].trim();
+    // Extract sender name and email from the from field
+    const fromMatch = event.data.from.match(/^(.+?)\s*<(.+?)>$/) || [null, event.data.from, event.data.from];
+    const senderName = fromMatch[1]?.trim() || event.data.from.split('@')[0];
+    const senderEmail = fromMatch[2] || event.data.from;
+
+    // Add original sender info to email body
+    const enrichedHtml = `
+      <div style="background: #f3f4f6; padding: 12px; margin-bottom: 16px; border-left: 4px solid #10b981; font-family: sans-serif;">
+        <strong>From:</strong> ${event.data.from}<br>
+        <strong>To:</strong> ${event.data.to.join(', ')}<br>
+        <strong>Reply to this email to respond to ${senderName}</strong>
+      </div>
+      ${htmlBody}
+    `;
+
+    const enrichedText = `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+From: ${event.data.from}
+To: ${event.data.to.join(', ')}
+Reply to this email to respond to ${senderName}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+${textBody}
+    `;
 
     await resend.emails.send({
-      from: `${senderName} via EVZAIN <performance@evzain.com>`,
+      from: 'EVZAIN Performance <performance@evzain.com>',
       to: [forwardToEmail],
-      replyTo: event.data.from,
-      subject: event.data.subject ?? '(no subject)',
-      html: htmlBody,
-      text: textBody,
+      replyTo: senderEmail,
+      subject: `[${senderName}] ${event.data.subject ?? '(no subject)'}`,
+      html: enrichedHtml,
+      text: enrichedText,
       attachments: validAttachments.length > 0 ? validAttachments : undefined,
     });
 
