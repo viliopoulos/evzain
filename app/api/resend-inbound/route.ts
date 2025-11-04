@@ -52,19 +52,48 @@ export async function POST(request: Request) {
       subject: event.data?.subject,
     });
 
-    // Fetch full email content using Resend SDK
-    const { data: emailData } = await resend.emails.receiving.get(emailId);
+    // Fetch full email content and attachments using Resend SDK
+    const [emailResponse, attachmentsResponse] = await Promise.all([
+      resend.emails.receiving.get(emailId),
+      (resend as any).attachments.receiving.list({ emailId }),
+    ]);
+
+    const emailData = emailResponse.data;
+    const attachmentsList = attachmentsResponse.data ?? [];
     
     const htmlBody = emailData?.html ?? (emailData?.text ? `<pre>${emailData.text}</pre>` : `<p>From: ${event.data.from}</p><p>Subject: ${event.data.subject}</p><p>(Email body not available)</p>`);
     const textBody = emailData?.text ?? emailData?.html?.replace(/<[^>]+>/g, '') ?? `From: ${event.data.from}\nSubject: ${event.data.subject}\n\n(Email body not available)`;
 
+    // Download and prepare attachments
+    const preparedAttachments = await Promise.all(
+      attachmentsList.map(async (attachment: any) => {
+        try {
+          const response = await fetch(attachment.download_url);
+          const buffer = Buffer.from(await response.arrayBuffer());
+          return {
+            filename: attachment.filename,
+            content: buffer.toString('base64'),
+          };
+        } catch (error) {
+          console.error('Failed to download attachment', { filename: attachment.filename, error });
+          return null;
+        }
+      })
+    );
+
+    const validAttachments = preparedAttachments.filter((a: { filename: string; content: string } | null): a is { filename: string; content: string } => a !== null);
+
+    // Extract sender name from email address
+    const senderName = event.data.from.split('@')[0].split('<')[0].trim();
+
     await resend.emails.send({
-      from: 'EVZAIN <performance@evzain.com>',
+      from: `${senderName} via EVZAIN <performance@evzain.com>`,
       to: [forwardToEmail],
       replyTo: event.data.from,
       subject: event.data.subject ?? '(no subject)',
       html: htmlBody,
       text: textBody,
+      attachments: validAttachments.length > 0 ? validAttachments : undefined,
     });
 
     console.log('Forwarded inbound email from Resend', {
