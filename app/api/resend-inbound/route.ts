@@ -42,16 +42,28 @@ export async function POST(request: Request) {
   }
 
   try {
+    console.log('Processing inbound email', {
+      emailId,
+      to: event.data?.to,
+      from: event.data?.from,
+      subject: event.data?.subject,
+    });
+
     const [emailResponse, attachmentsResponse] = await Promise.all([
       resend.emails.receiving.get(emailId),
       resend.attachments.receiving.list({ emailId }),
     ]);
 
     const emailData = emailResponse.data;
-    const attachments = attachmentsResponse.data?.data ?? [];
+    const attachmentsRaw = attachmentsResponse.data;
+    const attachmentsArray = Array.isArray((attachmentsRaw as any)?.data)
+      ? (attachmentsRaw as any).data
+      : Array.isArray(attachmentsRaw)
+        ? attachmentsRaw
+        : [];
 
     const preparedAttachments = await Promise.all(
-      attachments.map(async (attachment) => {
+      attachmentsArray.map(async (attachment: any) => {
         const downloadUrl = attachment.download_url;
         const filename = attachment.filename ?? 'attachment';
         const contentType = attachment.content_type ?? 'application/octet-stream';
@@ -101,12 +113,14 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ ok: true });
   } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     console.error('Failed to forward inbound Resend email', {
       emailId,
-      error,
+      error: errorMessage,
+      stack: error instanceof Error ? error.stack : undefined,
     });
 
-    return NextResponse.json({ error: 'Failed to process inbound email' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to process inbound email', details: errorMessage }, { status: 500 });
   }
 }
 
