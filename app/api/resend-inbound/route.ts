@@ -52,18 +52,29 @@ export async function POST(request: Request) {
       subject: event.data?.subject,
     });
 
-    // Use data directly from webhook payload
-    const htmlBody = event.data?.html ?? (event.data?.text ? `<pre>${event.data.text}</pre>` : '<p>(no content)</p>');
-    const textBody = event.data?.text ?? event.data?.html?.replace(/<[^>]+>/g, '') ?? '';
-    const attachments = event.data?.attachments ?? [];
+    // Fetch full email content from Resend API
+    const emailResponse = await fetch(`https://api.resend.com/emails/${emailId}`, {
+      headers: {
+        'Authorization': `Bearer ${resendApiKey}`,
+      },
+    });
+
+    if (!emailResponse.ok) {
+      throw new Error(`Failed to fetch email: ${emailResponse.statusText}`);
+    }
+
+    const emailData = await emailResponse.json();
+    
+    const htmlBody = emailData.html ?? (emailData.text ? `<pre>${emailData.text}</pre>` : `<p>From: ${event.data.from}</p><p>Subject: ${event.data.subject}</p><p>(Email body not available)</p>`);
+    const textBody = emailData.text ?? emailData.html?.replace(/<[^>]+>/g, '') ?? `From: ${event.data.from}\nSubject: ${event.data.subject}\n\n(Email body not available)`;
 
     await resend.emails.send({
       from: 'EVZAIN <performance@evzain.com>',
       to: [forwardToEmail],
-      subject: event.data.subject ?? '(no subject)',
+      replyTo: event.data.from,
+      subject: `Fwd: ${event.data.subject ?? '(no subject)'}`,
       html: htmlBody,
       text: textBody,
-      attachments: attachments.length ? attachments : undefined,
     });
 
     console.log('Forwarded inbound email from Resend', {
