@@ -55,11 +55,13 @@ export async function POST(request: Request) {
     // Fetch full email content and attachments using Resend SDK
     const [emailResponse, attachmentsResponse] = await Promise.all([
       resend.emails.receiving.get(emailId),
-      (resend as any).attachments.receiving.list({ emailId }),
+      resend.emails.receiving.attachments.list({ emailId }),
     ]);
 
     const emailData = emailResponse.data;
-    const attachmentsList = attachmentsResponse.data ?? [];
+    const attachmentsList = Array.isArray(attachmentsResponse.data?.data) 
+      ? attachmentsResponse.data.data 
+      : [];
     
     const htmlBody = emailData?.html ?? (emailData?.text ? `<pre>${emailData.text}</pre>` : `<p>From: ${event.data.from}</p><p>Subject: ${event.data.subject}</p><p>(Email body not available)</p>`);
     const textBody = emailData?.text ?? emailData?.html?.replace(/<[^>]+>/g, '') ?? `From: ${event.data.from}\nSubject: ${event.data.subject}\n\n(Email body not available)`;
