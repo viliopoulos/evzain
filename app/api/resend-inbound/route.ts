@@ -52,27 +52,17 @@ export async function POST(request: Request) {
       subject: event.data?.subject,
     });
 
-    // Fetch full email content from Resend API
-    const emailResponse = await fetch(`https://api.resend.com/emails/${emailId}`, {
-      headers: {
-        'Authorization': `Bearer ${resendApiKey}`,
-      },
-    });
-
-    if (!emailResponse.ok) {
-      throw new Error(`Failed to fetch email: ${emailResponse.statusText}`);
-    }
-
-    const emailData = await emailResponse.json();
+    // Fetch full email content using Resend SDK
+    const { data: emailData } = await resend.emails.receiving.get(emailId);
     
-    const htmlBody = emailData.html ?? (emailData.text ? `<pre>${emailData.text}</pre>` : `<p>From: ${event.data.from}</p><p>Subject: ${event.data.subject}</p><p>(Email body not available)</p>`);
-    const textBody = emailData.text ?? emailData.html?.replace(/<[^>]+>/g, '') ?? `From: ${event.data.from}\nSubject: ${event.data.subject}\n\n(Email body not available)`;
+    const htmlBody = emailData?.html ?? (emailData?.text ? `<pre>${emailData.text}</pre>` : `<p>From: ${event.data.from}</p><p>Subject: ${event.data.subject}</p><p>(Email body not available)</p>`);
+    const textBody = emailData?.text ?? emailData?.html?.replace(/<[^>]+>/g, '') ?? `From: ${event.data.from}\nSubject: ${event.data.subject}\n\n(Email body not available)`;
 
     await resend.emails.send({
       from: 'EVZAIN <performance@evzain.com>',
       to: [forwardToEmail],
       replyTo: event.data.from,
-      subject: `Fwd: ${event.data.subject ?? '(no subject)'}`,
+      subject: event.data.subject ?? '(no subject)',
       html: htmlBody,
       text: textBody,
     });
