@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { ArrowRight, Target, TrendingUp, Brain, Heart, Award, Clock, Mail, Dumbbell, Activity, BookOpen, Zap, Play, Watch, ChevronRight, Check } from 'lucide-react';
-import { BrandLogo } from '@/components/BrandLogo';
+import { EvzainBrandLogo } from '@/components/EvzainBrandLogo';
 import { generateRecommendations } from '@/lib/recommendation-generator';
 import { AssessmentData, AthleteProfile, TrainingRecommendation } from '@/lib/types';
 import { getExercisesForProfile, Exercise } from '@/lib/elite-exercises';
@@ -163,7 +163,7 @@ export default function ResultsPage() {
       {/* Header */}
       <div className="max-w-6xl mx-auto mb-12">
         <a href="/" className="inline-flex items-center text-white hover:text-cyan-400 transition-colors">
-          <BrandLogo height={42} />
+          <EvzainBrandLogo height={48} />
         </a>
       </div>
 

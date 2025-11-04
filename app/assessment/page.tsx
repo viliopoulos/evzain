@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { ArrowRight, ArrowLeft, Sparkles, Target } from 'lucide-react';
 import Link from 'next/link';
-import { BrandLogo } from '@/components/BrandLogo';
+import { EvzainBrandLogo } from '@/components/EvzainBrandLogo';
 
 interface AssessmentData {
   sport: string;
@@ -760,7 +760,7 @@ export default function Assessment() {
 
       {/* Header with Clickable Logo */}
       <Link href="/" className="fixed top-4 left-6 z-40 cursor-pointer hover:opacity-80 transition-opacity">
-        <BrandLogo height={32} />
+        <EvzainBrandLogo height={36} />
       </Link>
 
       {/* Step Counter */}
