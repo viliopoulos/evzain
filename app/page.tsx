@@ -107,14 +107,9 @@ export default function Home() {
               </Link>
             </div>
           </div>
-          <div className="max-w-3xl">
-            <p className="text-lg text-emerald-300 mb-2 font-light italic">
-              The Science of Living Well
-            </p>
-            <h2 className="text-2xl md:text-3xl font-light">
-              Train Smarter. Live Better. Achieve More.
-            </h2>
-          </div>
+          <h2 className="text-2xl md:text-3xl font-light max-w-3xl">
+            Train Smarter. Live Better. Achieve More.
+          </h2>
         </div>
       </header>
 
