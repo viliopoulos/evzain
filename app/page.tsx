@@ -61,12 +61,7 @@ export default function Home() {
         .zeta-watermark {
           font-family: 'Times New Roman', serif;
           font-size: 24px;
-          color: #14B8A6;
-          opacity: 0.6;
-          transition: opacity 0.3s ease;
-        }
-        .zeta-watermark:hover {
-          opacity: 0.6;
+          color: #10b981;
         }
         .zeta-bg {
           font-family: 'Times New Roman', serif;
