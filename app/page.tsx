@@ -59,9 +59,10 @@ export default function Home() {
           font-weight: 400;
         }
         .zeta-watermark {
-          font-family: 'Times New Roman', serif;
           font-size: 24px;
           color: #10b981;
+          line-height: 1;
+          display: inline-block;
         }
         .zeta-bg {
           font-family: 'Times New Roman', serif;
