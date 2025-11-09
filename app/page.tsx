@@ -111,7 +111,7 @@ export default function Home() {
             </div>
           </div>
           <h2 className="text-2xl md:text-3xl font-light max-w-3xl">
-            Train Smarter. Live Better. Achieve More.
+            Understanding the Science of Athletic Excellence
           </h2>
         </div>
       </header>
@@ -154,34 +154,33 @@ export default function Home() {
             <div className="relative bg-white rounded-xl shadow-lg p-8 border-l-4 border-emerald-500 overflow-hidden">
               <div className="zeta-bg">ζ</div>
               <h3 className="relative text-2xl font-semibold text-slate-900 mb-4">
-                Join the Revolution
+                Help Shape Performance Science
               </h3>
               <p className="relative text-slate-700 leading-relaxed mb-4">
-                <span className="font-semibold text-emerald-600">EVZAIN</span> is inspired by 
-                the ancient Greek concept (εὖ ζήν | eu zēn) which means "living well".
-                It’s where philosophy meets performance and where ancient wisdom meets modern AI.
+                <span className="font-semibold text-[#659832]">EVZAIN</span> is researching the intersection 
+                of athletics and mental success. We're studying what separates good athletes from great ones—not 
+                just physically, but mentally and emotionally.
               </p>
               <p className="relative text-slate-700 leading-relaxed">
-                Built by athletes for athletes, EVZAIN is your 24/7 performance coach. We blend 
-                sports science, personalized guidance, and real-time data from your wearables to optimize 
-                your training, recovery, and mindset. 
+                By sharing your athletic journey, you're contributing to groundbreaking research that will 
+                help the next generation of athletes unlock their potential.
               </p>
               <p className="relative text-slate-700 leading-relaxed mt-4">
-                Whether you're just starting your journey or 
-                competing at the highest level, discover the smarter way to train and live well.
+                Complete our assessment and receive your personalized athlete profile—a snapshot of your 
+                training style, mindset, and unique strengths.
               </p>
             </div>
 
             {/* What We Cover */}
             <div className="bg-gradient-to-br from-emerald-600 to-emerald-700 rounded-xl shadow-lg p-8 text-white">
-              <h4 className="text-xl font-semibold mb-6">Your Journey Starts Here:</h4>
+              <h4 className="text-xl font-semibold mb-6">What You'll Discover:</h4>
               <div className="grid grid-cols-1 gap-3">
                 {[
-                  'Build your complete athlete profile',
-                  'Identify and overcome your training barriers',
-                  'Track meaningful progress',
-                  'Clarify your "why" and sustain motivation',
-                  'Get personalized strategies to reach your goals',
+                  'Your unique athlete profile type',
+                  'Key insights about your training mindset',
+                  'How you compare to other athletes in your sport',
+                  'Personalized recommendations based on research',
+                  'Updates on our findings as we gather more data',
                 ].map((topic, idx) => (
                   <div key={idx} className="flex items-start gap-3">
                     <div className="w-2 h-2 bg-cyan-300 rounded-full mt-2 flex-shrink-0" />

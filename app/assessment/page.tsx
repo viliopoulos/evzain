@@ -163,8 +163,8 @@ export default function Assessment() {
         localStorage.setItem('assessmentData', JSON.stringify(data));
         localStorage.setItem('assessmentId', result.assessment.id);
         
-        // Navigate to results page
-        window.location.href = '/results';
+        // Navigate to completion page
+        window.location.href = '/complete';
       } else {
         console.error('Assessment submission failed:', result);
         alert(result.error || 'Failed to save assessment. Please try again.');
