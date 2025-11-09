@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { ArrowRight, ArrowLeft, Sparkles, Target } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface AssessmentData {
   sport: string;
@@ -709,7 +710,7 @@ export default function Assessment() {
   const currentQuestion = questions[step];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-[#061A35] via-[#0a2347] to-[#061A35]">
       <style jsx>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&display=swap');
         .logo-in {
@@ -764,10 +765,15 @@ export default function Assessment() {
       `}} />
 
       {/* Header with Clickable Logo */}
-      <Link href="/" className="fixed top-4 left-6 z-40 cursor-pointer hover:opacity-80 transition-opacity">
-        <h1 className="text-2xl text-white font-light tracking-tight">
-          EVZA<span className="logo-in">IN</span>
-        </h1>
+      <Link href="/" className="fixed top-4 left-6 z-40 cursor-pointer hover:opacity-90 transition-opacity">
+        <Image 
+          src="/EVZAIN white letters green zeta.png" 
+          alt="EVZAIN" 
+          width={140} 
+          height={35} 
+          priority
+          className="h-8 w-auto"
+        />
       </Link>
 
       {/* Step Counter */}

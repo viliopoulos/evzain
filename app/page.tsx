@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Mail, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 
 export default function Home() {
   const [email, setEmail] = useState('');
@@ -42,15 +43,8 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-cyan-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <style jsx>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&display=swap');
-        .logo-in {
-          font-family: 'Playfair Display', serif;
-          font-style: italic;
-          font-weight: 700;
-          color: #10b981;
-        }
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&display=swap');
         .logo-zeta {
           font-family: 'Times New Roman', serif;
@@ -81,27 +75,38 @@ export default function Home() {
       `}</style>
       
       {/* Header */}
-      <header className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white">
+      <header className="bg-[#061A35] text-white">
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="flex items-center justify-between mb-6">
-            <a href="/" className="hover:opacity-80 transition-opacity">
-              <h1 className="text-4xl md:text-5xl font-light tracking-tight">
-                EVZA<span className="logo-in">IN</span>
-              </h1>
+            <a href="/" className="hover:opacity-90 transition-opacity">
+              <Image 
+                src="/EVZAIN white letters green zeta.png" 
+                alt="EVZAIN" 
+                width={200} 
+                height={50} 
+                priority
+                className="h-12 w-auto"
+              />
             </a>
             <div className="flex items-center gap-3">
               <Link 
                 href="/origins"
-                className="text-right text-base md:text-lg text-emerald-300 hover:text-emerald-200 transition-colors"
+                className="text-right text-base md:text-lg text-[#659832] hover:text-[#7ab03d] transition-colors"
               >
                 Your AI Performance Partner
               </Link>
               <Link 
                 href="/origins"
-                className="zeta-watermark text-2xl cursor-pointer hover:opacity-100 transition-opacity"
+                className="cursor-pointer hover:opacity-80 transition-opacity"
                 title="Our Origins"
               >
-                ζ
+                <Image 
+                  src="/Greek zeta.png" 
+                  alt="Origins" 
+                  width={24} 
+                  height={32} 
+                  className="h-8 w-auto"
+                />
               </Link>
             </div>
           </div>

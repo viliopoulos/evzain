@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { ArrowRight, Target, TrendingUp, Brain, Heart, Award, Clock, Mail, Dumbbell, Activity, BookOpen, Zap, Play, Watch, ChevronRight, Check } from 'lucide-react';
+import Image from 'next/image';
 import { generateRecommendations } from '@/lib/recommendation-generator';
 import { AssessmentData, AthleteProfile, TrainingRecommendation } from '@/lib/types';
 import { getExercisesForProfile, Exercise } from '@/lib/elite-exercises';
@@ -136,7 +137,7 @@ export default function ResultsPage() {
   const segmentColor = getSegmentColor();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-[#061A35] via-[#0a2347] to-[#061A35] py-12 px-4 sm:px-6 lg:px-8">
       <style jsx>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&display=swap');
         .logo-in {
@@ -168,10 +169,15 @@ export default function ResultsPage() {
 
       {/* Header */}
       <div className="max-w-6xl mx-auto mb-12">
-        <a href="/" className="inline-flex items-center text-white hover:text-cyan-400 transition-colors">
-          <h1 className="text-3xl font-light tracking-tight">
-            EVZA<span className="logo-in">IN</span>
-          </h1>
+        <a href="/" className="inline-flex items-center hover:opacity-90 transition-opacity">
+          <Image 
+            src="/EVZAIN white letters green zeta.png" 
+            alt="EVZAIN" 
+            width={160} 
+            height={40} 
+            priority
+            className="h-10 w-auto"
+          />
         </a>
       </div>
 

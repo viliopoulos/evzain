@@ -14,10 +14,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "EVZAIN - Hyper-Specific Training Intelligence",
-  description: "Data-driven training intelligence for athletes. Sport-specific recommendations based on your level, goals, and training hours.",
+  title: "EVZAIN - Athletic Performance Research",
+  description: "Understanding the intersection of athletics and mental success. Share your journey to help shape the future of performance science.",
   icons: {
-    icon: '/zeta-favicon.svg',
+    icon: '/Greek zeta.png',
   },
 };
 

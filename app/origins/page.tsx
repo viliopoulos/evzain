@@ -2,6 +2,7 @@
 
 import { ArrowLeft, Mail } from 'lucide-react';
 import { useState } from 'react';
+import Image from 'next/image';
 
 export default function Origins() {
   const [email, setEmail] = useState('');
@@ -45,21 +46,30 @@ export default function Origins() {
       `}</style>
 
       {/* Header */}
-      <header className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white">
+      <header className="bg-[#061A35] text-white">
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="flex items-center justify-between mb-6">
-            <a href="/" className="hover:opacity-80 transition-opacity">
-              <h1 className="text-4xl md:text-5xl font-light tracking-tight">
-                EVZA<span className="logo-in">IN</span>
-              </h1>
+            <a href="/" className="hover:opacity-90 transition-opacity">
+              <Image 
+                src="/EVZAIN white letters green zeta.png" 
+                alt="EVZAIN" 
+                width={200} 
+                height={50} 
+                priority
+                className="h-12 w-auto"
+              />
             </a>
             <div className="flex items-center gap-3">
-              <div className="text-right text-sm text-emerald-300">
+              <div className="text-right text-sm text-[#659832]">
                 Origins
               </div>
-              <div className="text-2xl text-cyan-400 opacity-50">
-                ζ
-              </div>
+              <Image 
+                src="/Greek zeta.png" 
+                alt="Origins" 
+                width={20} 
+                height={28} 
+                className="h-7 w-auto opacity-70"
+              />
             </div>
           </div>
         </div>
