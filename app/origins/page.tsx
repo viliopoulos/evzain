@@ -47,16 +47,16 @@ export default function Origins() {
 
       {/* Header */}
       <header className="bg-[#061A35] text-white">
-        <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="max-w-7xl mx-auto px-6 py-10">
           <div className="flex items-center justify-between mb-6">
             <a href="/" className="hover:opacity-90 transition-opacity">
               <Image 
                 src="/EVZAIN white letters green zeta.png" 
                 alt="EVZAIN" 
-                width={200} 
-                height={50} 
+                width={360} 
+                height={90} 
                 priority
-                className="h-12 w-auto"
+                className="h-20 md:h-24 w-auto"
               />
             </a>
             <div className="flex items-center gap-3">

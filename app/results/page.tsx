@@ -173,10 +173,10 @@ export default function ResultsPage() {
           <Image 
             src="/EVZAIN white letters green zeta.png" 
             alt="EVZAIN" 
-            width={160} 
-            height={40} 
+            width={340} 
+            height={85} 
             priority
-            className="h-10 w-auto"
+            className="h-20 md:h-24 w-auto"
           />
         </a>
       </div>

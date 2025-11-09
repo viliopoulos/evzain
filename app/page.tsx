@@ -82,10 +82,10 @@ export default function Home() {
               <Image 
                 src="/EVZAIN white letters green zeta.png" 
                 alt="EVZAIN" 
-                width={280} 
-                height={70} 
+                width={360} 
+                height={90} 
                 priority
-                className="h-16 md:h-20 w-auto"
+                className="h-20 md:h-24 w-auto"
               />
             </a>
             <div className="flex items-center gap-3">

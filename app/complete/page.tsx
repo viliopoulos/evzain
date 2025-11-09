@@ -95,10 +95,10 @@ export default function CompletePage() {
           <Image 
             src="/EVZAIN white letters green zeta.png" 
             alt="EVZAIN" 
-            width={200} 
-            height={50} 
+            width={340} 
+            height={85} 
             priority
-            className="h-12 md:h-14 w-auto"
+            className="h-20 md:h-24 w-auto"
           />
         </a>
       </div>
