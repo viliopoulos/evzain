@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Mail, ArrowRight } from 'lucide-react';
+import { Mail, ArrowRight, Sparkles } from 'lucide-react';
 import Image from 'next/image';
 
 export default function Home() {
@@ -45,6 +45,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <style jsx>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&display=swap');
         .logo-zeta {
           font-family: 'Times New Roman', serif;
@@ -61,9 +62,6 @@ export default function Home() {
           font-weight: 400;
         }
         .zeta-bg {
-          font-family: 'Times New Roman', serif;
-          font-size: 180px;
-          color: #0891b2;
           opacity: 0.08;
           position: absolute;
           right: -40px;
@@ -71,6 +69,8 @@ export default function Home() {
           transform: translateY(-50%);
           user-select: none;
           pointer-events: none;
+          width: 180px;
+          height: 250px;
         }
       `}</style>
       
@@ -82,10 +82,10 @@ export default function Home() {
               <Image 
                 src="/EVZAIN white letters green zeta.png" 
                 alt="EVZAIN" 
-                width={200} 
-                height={50} 
+                width={280} 
+                height={70} 
                 priority
-                className="h-12 w-auto"
+                className="h-16 md:h-20 w-auto"
               />
             </a>
             <div className="flex items-center gap-3">
@@ -110,8 +110,8 @@ export default function Home() {
               </Link>
             </div>
           </div>
-          <h2 className="text-2xl md:text-3xl font-light max-w-3xl">
-            Understanding the Science of Athletic Excellence
+          <h2 className="text-2xl md:text-3xl font-light max-w-3xl" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+            Train Smarter. Live Better. Achieve More.
           </h2>
         </div>
       </header>
@@ -124,8 +124,8 @@ export default function Home() {
           <div className="relative space-y-6">
             {/* First Image */}
             <div className="relative">
-              <div className="absolute -inset-4 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 rounded-2xl blur-2xl" />
-              <div className="relative bg-white rounded-xl shadow-2xl overflow-hidden border-2 border-emerald-100">
+              <div className="absolute -inset-4 bg-gradient-to-br from-[#659832]/20 to-[#ea9aac]/20 rounded-2xl blur-2xl" />
+              <div className="relative bg-white rounded-xl shadow-2xl overflow-hidden border-2 border-[#659832]/20">
                 <img
                   src="/athlete.jpg"
                   alt="Athlete in action during training"
@@ -136,8 +136,8 @@ export default function Home() {
             
             {/* Second Image */}
             <div className="relative">
-              <div className="absolute -inset-4 bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 rounded-2xl blur-2xl" />
-              <div className="relative bg-white rounded-xl shadow-2xl overflow-hidden border-2 border-cyan-100">
+              <div className="absolute -inset-4 bg-gradient-to-br from-[#ea9aac]/20 to-[#659832]/20 rounded-2xl blur-2xl" />
+              <div className="relative bg-white rounded-xl shadow-2xl overflow-hidden border-2 border-[#ea9aac]/20">
                 <img
                   src="/athlete2.jpg"
                   alt="Training session"
@@ -151,39 +151,47 @@ export default function Home() {
           <div className="space-y-8">
             
             {/* Introduction */}
-            <div className="relative bg-white rounded-xl shadow-lg p-8 border-l-4 border-emerald-500 overflow-hidden">
-              <div className="zeta-bg">ζ</div>
-              <h3 className="relative text-2xl font-semibold text-slate-900 mb-4">
-                Help Shape Performance Science
+            <div className="relative bg-white rounded-xl shadow-lg p-8 border-l-4 border-[#659832] overflow-hidden">
+              <Image 
+                src="/Greek zeta.png" 
+                alt="" 
+                width={180} 
+                height={250} 
+                className="zeta-bg"
+                style={{ filter: 'opacity(0.08) grayscale(100%)' }}
+              />
+              <h3 className="relative text-2xl font-semibold text-slate-900 mb-4" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+                Join the Revolution
               </h3>
               <p className="relative text-slate-700 leading-relaxed mb-4">
-                <span className="font-semibold text-[#659832]">EVZAIN</span> is researching the intersection 
-                of athletics and mental success. We're studying what separates good athletes from great ones—not 
-                just physically, but mentally and emotionally.
+                <span className="font-semibold text-[#659832]">EVZAIN</span> is inspired by 
+                the ancient Greek concept (εὖ ζῆν | eu zēn) which means "living well".
+                It's where philosophy meets performance and where ancient wisdom meets modern AI.
               </p>
               <p className="relative text-slate-700 leading-relaxed">
-                By sharing your athletic journey, you're contributing to groundbreaking research that will 
-                help the next generation of athletes unlock their potential.
+                Built by athletes for athletes, EVZAIN is your 24/7 performance coach. We blend 
+                sports science, personalized guidance, and real-time data from your wearables to optimize 
+                your training, recovery, and mindset.
               </p>
               <p className="relative text-slate-700 leading-relaxed mt-4">
-                Complete our assessment and receive your personalized athlete profile—a snapshot of your 
-                training style, mindset, and unique strengths.
+                Whether you're just starting your journey or 
+                competing at the highest level, discover the smarter way to train and live well.
               </p>
             </div>
 
             {/* What We Cover */}
-            <div className="bg-gradient-to-br from-emerald-600 to-emerald-700 rounded-xl shadow-lg p-8 text-white">
-              <h4 className="text-xl font-semibold mb-6">What You'll Discover:</h4>
+            <div className="bg-gradient-to-br from-[#659832] to-[#7ab03d] rounded-xl shadow-lg p-8 text-white">
+              <h4 className="text-xl font-semibold mb-6" style={{ fontFamily: 'Cormorant Garamond, serif' }}>Your Journey Starts Here:</h4>
               <div className="grid grid-cols-1 gap-3">
                 {[
-                  'Your unique athlete profile type',
-                  'Key insights about your training mindset',
-                  'How you compare to other athletes in your sport',
-                  'Personalized recommendations based on research',
-                  'Updates on our findings as we gather more data',
+                  'Build your complete athlete profile',
+                  'Identify and overcome your training barriers',
+                  'Track meaningful progress',
+                  'Clarify your "why" and sustain motivation',
+                  'Get personalized strategies to reach your goals',
                 ].map((topic, idx) => (
                   <div key={idx} className="flex items-start gap-3">
-                    <div className="w-2 h-2 bg-cyan-300 rounded-full mt-2 flex-shrink-0" />
+                    <div className="w-2 h-2 bg-[#ea9aac] rounded-full mt-2 flex-shrink-0" />
                     <span className="text-emerald-50">{topic}</span>
                   </div>
                 ))}
@@ -191,28 +199,29 @@ export default function Home() {
             </div>
 
             {/* CTA Button */}
-            <div className="bg-white rounded-xl shadow-lg p-8 border-2 border-emerald-100">
+            <div className="bg-white rounded-xl shadow-lg p-8 border-2 border-[#659832]/20">
               <div className="flex items-center gap-3 mb-4 flex-wrap">
                 <div className="flex items-center gap-2 text-xs text-slate-600">
-                  <div className="w-2 h-2 bg-emerald-500 rounded-full" />
+                  <div className="w-2 h-2 bg-[#659832] rounded-full" />
                   <span>Private & Secure</span>
                 </div>
                 <div className="flex items-center gap-2 text-xs text-slate-600">
-                  <div className="w-2 h-2 bg-cyan-500 rounded-full" />
+                  <div className="w-2 h-2 bg-[#ea9aac] rounded-full" />
                   <span>5 Minutes to Start</span>
                 </div>
                 <div className="flex items-center gap-2 text-xs text-slate-600">
-                  <div className="w-2 h-2 bg-amber-500 rounded-full" />
+                  <div className="w-2 h-2 bg-[#061A35] rounded-full" />
                   <span>Instant Insights</span>
                 </div>
               </div>
               
               <Link
                 href="/assessment"
-                className="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white py-5 px-8 rounded-lg font-bold text-xl transition-all flex items-center justify-center gap-3 group shadow-xl shadow-emerald-300 hover:shadow-2xl hover:shadow-emerald-400 transform hover:scale-[1.02]"
+                className="w-full bg-gradient-to-r from-[#659832] to-[#7ab03d] text-white px-8 py-4 rounded-lg hover:from-[#7ab03d] hover:to-[#659832] transition-all font-semibold text-lg shadow-lg shadow-[#659832]/30 flex items-center justify-center gap-2" style={{ fontFamily: 'Cormorant Garamond, serif' }}
               >
-                <span>Unlock Your Potential Now</span>
-                <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
+                <Sparkles className="w-5 h-5" />
+                Start Your Assessment
+                <ArrowRight className="w-5 h-5" />
               </Link>
             </div>
           </div>
@@ -220,10 +229,10 @@ export default function Home() {
       </main>
 
       {/* Additional Email Signup Section */}
-      <div className="bg-gradient-to-br from-cyan-600 to-cyan-700 py-16 px-6">
+      <div className="bg-gradient-to-br from-[#659832] to-[#7ab03d] py-16 px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">Ready to Transform Your Training?</h3>
-          <p className="text-cyan-50 text-lg mb-8 max-w-2xl mx-auto">
+          <h3 className="text-2xl md:text-3xl font-bold text-white mb-4" style={{ fontFamily: 'Cormorant Garamond, serif' }}>Ready to Transform Your Training?</h3>
+          <p className="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
             Join our exclusive waitlist and be the first to experience EVZAIN's AI-powered performance coaching.
           </p>
           <form onSubmit={handleEmailSubmit} className="max-w-lg mx-auto flex flex-col sm:flex-row gap-3">
