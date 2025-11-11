@@ -80,7 +80,7 @@ export default function Home() {
           <div className="flex items-center justify-between mb-6">
             <a href="/" className="hover:opacity-90 transition-opacity">
               <Image 
-                src="/EVZAIN white letters green zeta.png" 
+                src="/EVZAIN Logo.png" 
                 alt="EVZAIN" 
                 width={1080} 
                 height={270} 
@@ -91,7 +91,7 @@ export default function Home() {
             <div className="flex items-center gap-3">
               <Link 
                 href="/origins"
-                className="text-right text-3xl md:text-4xl text-[#659832] hover:text-[#7ab03d] transition-colors font-semibold"
+                className="text-right text-base md:text-lg text-[#659832] hover:text-[#7ab03d] transition-colors"
               >
                 Your AI Performance Partner
               </Link>
@@ -103,9 +103,9 @@ export default function Home() {
                 <Image 
                   src="/Greek zeta.png" 
                   alt="Origins" 
-                  width={72} 
-                  height={96} 
-                  className="h-24 w-auto"
+                  width={90} 
+                  height={120} 
+                  className="h-32 w-auto brightness-0 invert"
                 />
               </Link>
             </div>
@@ -117,8 +117,8 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 py-8">
-        <div className="grid md:grid-cols-2 gap-12 items-start">
+      <main className="max-w-7xl mx-auto px-6 pt-4 pb-12">
+        <div className="grid md:grid-cols-2 gap-8 items-start">
           
           {/* Left Column - Images */}
           <div className="relative space-y-6">
