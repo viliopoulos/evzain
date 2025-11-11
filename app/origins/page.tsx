@@ -51,12 +51,12 @@ export default function Origins() {
           <div className="flex items-center justify-between mb-6">
             <a href="/" className="hover:opacity-90 transition-opacity">
               <Image 
-                src="/EVZAIN white letters green zeta.png" 
+                src="/EVZAIN Logo.png" 
                 alt="EVZAIN" 
-                width={1080} 
-                height={270} 
+                width={540} 
+                height={135} 
                 priority
-                className="h-60 md:h-72 w-auto"
+                className="h-30 md:h-36 w-auto"
               />
             </a>
             <div className="flex items-center gap-3">

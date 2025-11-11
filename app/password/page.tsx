@@ -49,10 +49,10 @@ export default function PasswordPage() {
           <Image 
             src="/EVZAIN Logo.png" 
             alt="EVZAIN" 
-            width={1080} 
-            height={270} 
+            width={540} 
+            height={135} 
             priority
-            className="h-60 md:h-72 w-auto mx-auto mb-8"
+            className="h-30 md:h-36 w-auto mx-auto mb-8"
           />
           <h1 
             className="text-4xl md:text-5xl font-light text-white mb-4" 

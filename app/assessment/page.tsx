@@ -767,12 +767,12 @@ export default function Assessment() {
       {/* Header with Clickable Logo */}
       <Link href="/" className="fixed top-4 left-6 z-40 cursor-pointer hover:opacity-90 transition-opacity">
         <Image 
-          src="/EVZAIN white letters green zeta.png" 
+          src="/EVZAIN Logo.png" 
           alt="EVZAIN" 
-          width={840} 
-          height={210} 
+          width={420} 
+          height={105} 
           priority
-          className="h-42 md:h-60 w-auto"
+          className="h-21 md:h-30 w-auto"
         />
       </Link>
 

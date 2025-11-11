@@ -171,12 +171,12 @@ export default function ResultsPage() {
       <div className="max-w-6xl mx-auto mb-12">
         <a href="/" className="inline-flex items-center hover:opacity-90 transition-opacity">
           <Image 
-            src="/EVZAIN white letters green zeta.png" 
+            src="/EVZAIN Logo.png" 
             alt="EVZAIN" 
-            width={1020} 
-            height={255} 
+            width={510} 
+            height={127} 
             priority
-            className="h-60 md:h-72 w-auto"
+            className="h-30 md:h-36 w-auto"
           />
         </a>
       </div>

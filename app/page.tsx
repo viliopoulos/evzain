@@ -82,16 +82,16 @@ export default function Home() {
               <Image 
                 src="/EVZAIN Logo.png" 
                 alt="EVZAIN" 
-                width={1080} 
-                height={270} 
+                width={540} 
+                height={135} 
                 priority
-                className="h-60 md:h-72 w-auto"
+                className="h-30 md:h-36 w-auto"
               />
             </a>
             <div className="flex items-center gap-3">
               <Link 
                 href="/origins"
-                className="text-right text-base md:text-lg text-[#659832] hover:text-[#7ab03d] transition-colors"
+                className="text-right text-sm md:text-base text-[#659832] hover:text-[#7ab03d] transition-colors"
               >
                 Your AI Performance Partner
               </Link>
@@ -103,9 +103,9 @@ export default function Home() {
                 <Image 
                   src="/Greek zeta.png" 
                   alt="Origins" 
-                  width={90} 
-                  height={120} 
-                  className="h-32 w-auto brightness-0 invert"
+                  width={45} 
+                  height={60} 
+                  className="h-16 w-auto brightness-0 invert"
                 />
               </Link>
             </div>
@@ -157,23 +157,23 @@ export default function Home() {
                 alt="" 
                 width={180} 
                 height={250} 
-                className="zeta-bg"
+                className="absolute top-1/2 right-8 -translate-y-1/2 pointer-events-none z-0"
                 style={{ filter: 'opacity(0.08) grayscale(100%)' }}
               />
-              <h3 className="relative text-2xl font-semibold text-slate-900 mb-4" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+              <h3 className="relative z-10 text-2xl font-semibold text-slate-900 mb-4" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
                 Join the Revolution
               </h3>
-              <p className="relative text-slate-700 leading-relaxed mb-4">
+              <p className="relative z-10 text-slate-700 leading-relaxed mb-4">
                 <span className="font-semibold text-[#659832]">EVZAIN</span> is inspired by 
                 the ancient Greek concept (εὖ ζῆν | eu zēn) which means "living well".
                 It's where philosophy meets performance and where ancient wisdom meets modern AI.
               </p>
-              <p className="relative text-slate-700 leading-relaxed">
+              <p className="relative z-10 text-slate-700 leading-relaxed">
                 Built by athletes for athletes, EVZAIN is your 24/7 performance coach. We blend 
                 sports science, personalized guidance, and real-time data from your wearables to optimize 
                 your training, recovery, and mindset.
               </p>
-              <p className="relative text-slate-700 leading-relaxed mt-4">
+              <p className="relative z-10 text-slate-700 leading-relaxed mt-4">
                 Whether you're just starting your journey or 
                 competing at the highest level, discover the smarter way to train and live well.
               </p>
