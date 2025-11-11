@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { Mail, CheckCircle, Sparkles } from 'lucide-react';
 import Image from 'next/image';
-import { sendProfileEmail } from '@/lib/email/profile-sender';
 
 export default function CompletePage() {
   const [email, setEmail] = useState('');
@@ -27,28 +26,23 @@ export default function CompletePage() {
     setIsSubmitting(true);
 
     try {
-      // Send profile email with athlete snapshot
-      await sendProfileEmail({
-        email,
-        name,
-        assessmentData,
-      });
-
-      // Store completion data in Supabase
       const sessionId = localStorage.getItem('sessionId');
-      await fetch('/api/track', {
+      
+      // Send profile request to API
+      const response = await fetch('/api/send-profile', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          event_type: 'research_completion',
-          session_id: sessionId,
-          data: {
-            email,
-            name,
-            completed_at: new Date().toISOString(),
-          },
+          email,
+          name,
+          assessmentData,
+          sessionId,
         }),
       });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit profile request');
+      }
 
       setSubmitted(true);
     } catch (error) {
@@ -95,10 +89,10 @@ export default function CompletePage() {
           <Image 
             src="/EVZAIN white letters green zeta.png" 
             alt="EVZAIN" 
-            width={340} 
-            height={85} 
+            width={1020} 
+            height={255} 
             priority
-            className="h-20 md:h-24 w-auto"
+            className="h-60 md:h-72 w-auto"
           />
         </a>
       </div>

@@ -53,10 +53,10 @@ export default function Origins() {
               <Image 
                 src="/EVZAIN white letters green zeta.png" 
                 alt="EVZAIN" 
-                width={360} 
-                height={90} 
+                width={1080} 
+                height={270} 
                 priority
-                className="h-20 md:h-24 w-auto"
+                className="h-60 md:h-72 w-auto"
               />
             </a>
             <div className="flex items-center gap-3">
@@ -66,9 +66,9 @@ export default function Origins() {
               <Image 
                 src="/Greek zeta.png" 
                 alt="Origins" 
-                width={20} 
-                height={28} 
-                className="h-7 w-auto opacity-70"
+                width={60} 
+                height={84} 
+                className="h-21 w-auto opacity-70"
               />
             </div>
           </div>

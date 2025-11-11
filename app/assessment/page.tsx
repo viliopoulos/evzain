@@ -769,10 +769,10 @@ export default function Assessment() {
         <Image 
           src="/EVZAIN white letters green zeta.png" 
           alt="EVZAIN" 
-          width={280} 
-          height={70} 
+          width={840} 
+          height={210} 
           priority
-          className="h-14 md:h-20 w-auto"
+          className="h-42 md:h-60 w-auto"
         />
       </Link>
 

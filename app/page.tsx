@@ -76,22 +76,22 @@ export default function Home() {
       
       {/* Header */}
       <header className="bg-[#061A35] text-white">
-        <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="max-w-7xl mx-auto px-6 py-12">
           <div className="flex items-center justify-between mb-6">
             <a href="/" className="hover:opacity-90 transition-opacity">
               <Image 
                 src="/EVZAIN white letters green zeta.png" 
                 alt="EVZAIN" 
-                width={360} 
-                height={90} 
+                width={1080} 
+                height={270} 
                 priority
-                className="h-20 md:h-24 w-auto"
+                className="h-60 md:h-72 w-auto"
               />
             </a>
             <div className="flex items-center gap-3">
               <Link 
                 href="/origins"
-                className="text-right text-base md:text-lg text-[#659832] hover:text-[#7ab03d] transition-colors"
+                className="text-right text-3xl md:text-4xl text-[#659832] hover:text-[#7ab03d] transition-colors font-semibold"
               >
                 Your AI Performance Partner
               </Link>
@@ -103,21 +103,21 @@ export default function Home() {
                 <Image 
                   src="/Greek zeta.png" 
                   alt="Origins" 
-                  width={24} 
-                  height={32} 
-                  className="h-8 w-auto"
+                  width={72} 
+                  height={96} 
+                  className="h-24 w-auto"
                 />
               </Link>
             </div>
           </div>
-          <h2 className="text-2xl md:text-3xl font-light max-w-3xl" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+          <h2 className="text-3xl md:text-4xl font-light max-w-3xl mt-4" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
             Train Smarter. Live Better. Achieve More.
           </h2>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 py-12">
+      <main className="max-w-7xl mx-auto px-6 py-8">
         <div className="grid md:grid-cols-2 gap-12 items-start">
           
           {/* Left Column - Images */}
