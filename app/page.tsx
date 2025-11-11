@@ -80,7 +80,7 @@ export default function Home() {
           <div className="flex items-center justify-between mb-6">
             <a href="/" className="hover:opacity-90 transition-opacity">
               <Image 
-                src="/EVZAIN Logo.png" 
+                src="/EV White.png" 
                 alt="EVZAIN" 
                 width={540} 
                 height={135} 
@@ -94,19 +94,6 @@ export default function Home() {
                 className="text-right text-sm md:text-base text-[#659832] hover:text-[#7ab03d] transition-colors"
               >
                 Your AI Performance Partner
-              </Link>
-              <Link 
-                href="/origins"
-                className="cursor-pointer hover:opacity-80 transition-opacity"
-                title="Our Origins"
-              >
-                <Image 
-                  src="/Greek zeta.png" 
-                  alt="Origins" 
-                  width={45} 
-                  height={60} 
-                  className="h-16 w-auto brightness-0 invert"
-                />
               </Link>
             </div>
           </div>

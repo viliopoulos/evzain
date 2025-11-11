@@ -171,7 +171,7 @@ export default function ResultsPage() {
       <div className="max-w-6xl mx-auto mb-12">
         <a href="/" className="inline-flex items-center hover:opacity-90 transition-opacity">
           <Image 
-            src="/EVZAIN Logo.png" 
+            src="/EV White.png" 
             alt="EVZAIN" 
             width={510} 
             height={127} 

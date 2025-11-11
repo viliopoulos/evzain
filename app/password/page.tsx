@@ -47,7 +47,7 @@ export default function PasswordPage() {
         {/* Large Logo - 3x Size */}
         <div className="text-center mb-12">
           <Image 
-            src="/EVZAIN Logo.png" 
+            src="/EV White.png" 
             alt="EVZAIN" 
             width={540} 
             height={135} 
