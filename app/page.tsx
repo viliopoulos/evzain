@@ -76,30 +76,30 @@ export default function Home() {
       
       {/* Header */}
       <header className="bg-[#061A35] text-white">
-        <div className="max-w-7xl mx-auto px-6 py-12">
-          <div className="flex items-center justify-between mb-6">
+        <div className="max-w-7xl mx-auto px-6 py-8">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-6">
             <a href="/" className="hover:opacity-90 transition-opacity">
               <Image 
                 src="/EV White.png" 
                 alt="EVZAIN" 
-                width={540} 
-                height={135} 
+                width={810} 
+                height={202} 
                 priority
-                className="h-30 md:h-36 w-auto"
+                className="h-40 md:h-48 w-auto"
               />
             </a>
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col items-start md:items-end gap-2">
               <Link 
                 href="/origins"
-                className="text-right text-sm md:text-base text-[#659832] hover:text-[#7ab03d] transition-colors"
+                className="text-sm md:text-base text-[#659832] hover:text-[#7ab03d] transition-colors"
               >
                 Your AI Performance Partner
               </Link>
+              <h2 className="text-2xl md:text-3xl font-light" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+                Train Smarter. Live Better. Achieve More.
+              </h2>
             </div>
           </div>
-          <h2 className="text-3xl md:text-4xl font-light max-w-3xl mt-4" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-            Train Smarter. Live Better. Achieve More.
-          </h2>
         </div>
       </header>
 

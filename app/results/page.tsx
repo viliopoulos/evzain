@@ -173,10 +173,10 @@ export default function ResultsPage() {
           <Image 
             src="/EV White.png" 
             alt="EVZAIN" 
-            width={510} 
-            height={127} 
+            width={765} 
+            height={191} 
             priority
-            className="h-30 md:h-36 w-auto"
+            className="h-40 md:h-48 w-auto"
           />
         </a>
       </div>
