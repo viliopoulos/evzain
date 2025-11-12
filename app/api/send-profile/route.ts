@@ -29,30 +29,27 @@ export async function POST(request: NextRequest) {
     }
 
     // Store the completion data in Supabase
+    console.log('💾 Attempting to save to Supabase...');
     const { data, error } = await supabase
       .from('web_analytics')
-      .insert([
-        {
-          event_type: 'profile_request',
-          session_id: sessionId || 'unknown',
-          data: {
-            email,
-            name,
-            assessment_summary: assessmentData,
-            completed_at: new Date().toISOString(),
-          },
+      .insert({
+        event_type: 'profile_request',
+        session_id: sessionId || 'unknown',
+        data: {
+          email,
+          name,
+          assessment_summary: assessmentData,
+          completed_at: new Date().toISOString(),
         },
-      ]);
+      });
 
     if (error) {
       console.error('❌ Supabase error:', error);
-      return NextResponse.json(
-        { error: 'Failed to store data', details: error.message },
-        { status: 500 }
-      );
+      console.log('⚠️ Continuing without saving to database...');
+      // Don't fail the request - continue to send email
+    } else {
+      console.log('✅ Data saved to Supabase');
     }
-    
-    console.log('✅ Data saved to Supabase');
 
     // Send profile email
     console.log('📧 Preparing to send email...');
