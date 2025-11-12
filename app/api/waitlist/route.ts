@@ -48,8 +48,10 @@ function validateEmail(email: string): { valid: boolean; error?: string } {
 }
 
 export async function POST(request: NextRequest) {
+  console.log('🎯 API: waitlist called');
+  
   if (!supabase) {
-    console.error('Supabase client not initialized');
+    console.error('❌ Supabase client not initialized');
     return NextResponse.json(
       { error: 'Service temporarily unavailable' },
       { status: 503 }
@@ -58,6 +60,8 @@ export async function POST(request: NextRequest) {
 
   try {
     const { email, source } = await request.json();
+    console.log('📧 Waitlist email:', email);
+    console.log('📍 Source:', source);
 
     // Validate email
     const validation = validateEmail(email);
@@ -110,19 +114,29 @@ export async function POST(request: NextRequest) {
     }
 
     // Send waitlist welcome email
+    console.log('📧 Preparing welcome email...');
     let emailSent = false;
     let emailError: string | undefined;
     try {
+      if (!process.env.RESEND_API_KEY) {
+        throw new Error('RESEND_API_KEY not configured');
+      }
+      
+      console.log('📧 Generating waitlist email HTML...');
       const emailHtml = generateWaitlistEmail({ email: trimmedEmail });
-      await resend.emails.send({
+      
+      console.log('📧 Sending welcome email via Resend...');
+      const result = await resend.emails.send({
         from: 'EVZAIN <hello@evzain.com>',
         to: trimmedEmail,
         subject: 'Welcome to EVZAIN - Take Your Athlete Assessment',
         html: emailHtml,
       });
+      
+      console.log('✅ Welcome email sent successfully!', result);
       emailSent = true;
     } catch (err) {
-      console.error('Failed to send waitlist welcome email:', err);
+      console.error('❌ Failed to send waitlist welcome email:', err);
       emailError = err instanceof Error ? err.message : 'Unknown email error';
     }
 

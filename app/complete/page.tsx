@@ -24,30 +24,44 @@ export default function CompletePage() {
     if (isSubmitting || !email || !name) return;
 
     setIsSubmitting(true);
+    console.log('🚀 Starting submission...');
+    console.log('📧 Email:', email);
+    console.log('👤 Name:', name);
+    console.log('📊 Assessment data:', assessmentData);
 
     try {
       const sessionId = localStorage.getItem('sessionId');
+      
+      const payload = {
+        email,
+        name,
+        assessmentData,
+        sessionId,
+      };
+      
+      console.log('📤 Sending payload:', payload);
       
       // Send profile request to API
       const response = await fetch('/api/send-profile', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email,
-          name,
-          assessmentData,
-          sessionId,
-        }),
+        body: JSON.stringify(payload),
       });
 
+      console.log('📥 Response status:', response.status);
+      
+      const responseData = await response.json();
+      console.log('📥 Response data:', responseData);
+
       if (!response.ok) {
-        throw new Error('Failed to submit profile request');
+        throw new Error(responseData.error || 'Failed to submit profile request');
       }
 
+      console.log('✅ Submission successful!');
       setSubmitted(true);
     } catch (error) {
-      console.error('Error submitting:', error);
-      alert('Something went wrong. Please try again.');
+      console.error('❌ Error submitting:', error);
+      alert(`Something went wrong: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`);
     } finally {
       setIsSubmitting(false);
     }

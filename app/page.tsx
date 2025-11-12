@@ -147,7 +147,7 @@ export default function Home() {
                 className="absolute top-1/2 right-8 -translate-y-1/2 pointer-events-none z-0"
                 style={{ filter: 'opacity(0.08) grayscale(100%)' }}
               />
-              <h3 className="relative z-10 text-2xl font-semibold text-slate-900 mb-4" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+              <h3 className="relative z-10 text-3xl md:text-4xl font-bold text-slate-900 mb-4" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
                 Join the Revolution
               </h3>
               <p className="relative z-10 text-slate-700 leading-relaxed mb-4">
@@ -168,7 +168,7 @@ export default function Home() {
 
             {/* What We Cover */}
             <div className="bg-gradient-to-br from-[#659832] to-[#7ab03d] rounded-xl shadow-lg p-8 text-white">
-              <h4 className="text-xl font-semibold mb-6" style={{ fontFamily: 'Cormorant Garamond, serif' }}>Your Journey Starts Here:</h4>
+              <h4 className="text-2xl md:text-3xl font-bold mb-6" style={{ fontFamily: 'Cormorant Garamond, serif' }}>Your Journey Starts Here:</h4>
               <div className="grid grid-cols-1 gap-3">
                 {[
                   'Build your complete athlete profile',
@@ -188,27 +188,27 @@ export default function Home() {
             {/* CTA Button */}
             <div className="bg-white rounded-xl shadow-lg p-8 border-2 border-[#659832]/20">
               <div className="flex items-center gap-3 mb-4 flex-wrap">
-                <div className="flex items-center gap-2 text-xs text-slate-600">
-                  <div className="w-2 h-2 bg-[#659832] rounded-full" />
+                <div className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                  <div className="w-3 h-3 bg-[#659832] rounded-full" />
                   <span>Private & Secure</span>
                 </div>
-                <div className="flex items-center gap-2 text-xs text-slate-600">
-                  <div className="w-2 h-2 bg-[#ea9aac] rounded-full" />
+                <div className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                  <div className="w-3 h-3 bg-[#ea9aac] rounded-full" />
                   <span>5 Minutes to Start</span>
                 </div>
-                <div className="flex items-center gap-2 text-xs text-slate-600">
-                  <div className="w-2 h-2 bg-[#061A35] rounded-full" />
+                <div className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                  <div className="w-3 h-3 bg-[#659832] rounded-full" />
                   <span>Instant Insights</span>
                 </div>
               </div>
               
               <Link
                 href="/assessment"
-                className="w-full bg-gradient-to-r from-[#659832] to-[#7ab03d] text-white px-8 py-4 rounded-lg hover:from-[#7ab03d] hover:to-[#659832] transition-all font-semibold text-lg shadow-lg shadow-[#659832]/30 flex items-center justify-center gap-2" style={{ fontFamily: 'Cormorant Garamond, serif' }}
+                className="w-full bg-gradient-to-r from-[#659832] to-[#7ab03d] text-white px-8 py-5 rounded-lg hover:from-[#7ab03d] hover:to-[#659832] transition-all font-bold text-xl shadow-lg shadow-[#659832]/30 flex items-center justify-center gap-2" style={{ fontFamily: 'Cormorant Garamond, serif' }}
               >
-                <Sparkles className="w-5 h-5" />
+                <Sparkles className="w-6 h-6" />
                 Start Your Assessment
-                <ArrowRight className="w-5 h-5" />
+                <ArrowRight className="w-6 h-6" />
               </Link>
             </div>
           </div>

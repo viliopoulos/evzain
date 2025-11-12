@@ -11,11 +11,17 @@ const supabase = createClient(
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: NextRequest) {
+  console.log('🎯 API: send-profile called');
   try {
     const body = await request.json();
     const { email, name, assessmentData, sessionId } = body;
+    
+    console.log('📧 Received email:', email);
+    console.log('👤 Received name:', name);
+    console.log('📊 Has assessment data:', !!assessmentData);
 
     if (!email || !name) {
+      console.error('❌ Missing required fields');
       return NextResponse.json(
         { error: 'Email and name are required' },
         { status: 400 }
@@ -39,15 +45,26 @@ export async function POST(request: NextRequest) {
       ]);
 
     if (error) {
-      console.error('Supabase error:', error);
+      console.error('❌ Supabase error:', error);
       return NextResponse.json(
-        { error: 'Failed to store data' },
+        { error: 'Failed to store data', details: error.message },
         { status: 500 }
       );
     }
+    
+    console.log('✅ Data saved to Supabase');
 
     // Send profile email
+    console.log('📧 Preparing to send email...');
+    let emailSent = false;
+    let emailErrorMsg = null;
+    
     try {
+      if (!process.env.RESEND_API_KEY) {
+        throw new Error('RESEND_API_KEY not configured');
+      }
+      
+      console.log('📧 Generating email HTML...');
       const emailHtml = generateProfileEmail({
         name,
         sport: assessmentData?.sport || 'Your Sport',
@@ -58,20 +75,27 @@ export async function POST(request: NextRequest) {
         progressTracking: assessmentData?.progress_tracking || 'Manual tracking',
       });
 
-      await resend.emails.send({
+      console.log('📧 Sending email via Resend...');
+      const emailResult = await resend.emails.send({
         from: 'EVZAIN <hello@evzain.com>',
         to: email,
         subject: `${name}, Your EVZAIN Athlete Profile is Ready`,
         html: emailHtml,
       });
+      
+      console.log('✅ Email sent successfully!', emailResult);
+      emailSent = true;
     } catch (emailError) {
-      console.error('Email send error:', emailError);
+      console.error('❌ Email send error:', emailError);
+      emailErrorMsg = emailError instanceof Error ? emailError.message : 'Unknown error';
       // Don't fail the request if email fails
     }
     
     return NextResponse.json({ 
       success: true,
-      message: 'Profile sent to your email!' 
+      message: emailSent ? 'Profile sent to your email!' : 'Profile saved! Email may be delayed.',
+      emailSent,
+      emailError: emailErrorMsg
     });
   } catch (error) {
     console.error('Error in send-profile:', error);
