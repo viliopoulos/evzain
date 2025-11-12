@@ -89,10 +89,10 @@ export default function CompletePage() {
           <Image 
             src="/EV White.png" 
             alt="EVZAIN" 
-            width={765} 
-            height={191} 
+            width={1147} 
+            height={286} 
             priority
-            className="h-40 md:h-48 w-auto"
+            className="h-60 md:h-72 w-auto"
           />
         </a>
       </div>

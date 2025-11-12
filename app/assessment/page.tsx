@@ -769,10 +769,10 @@ export default function Assessment() {
         <Image 
           src="/EV White.png" 
           alt="EVZAIN" 
-          width={630} 
-          height={157} 
+          width={945} 
+          height={236} 
           priority
-          className="h-32 md:h-40 w-auto"
+          className="h-48 md:h-60 w-auto"
         />
       </Link>
 

@@ -53,10 +53,10 @@ export default function Origins() {
               <Image 
                 src="/EV White.png" 
                 alt="EVZAIN" 
-                width={810} 
-                height={202} 
+                width={1215} 
+                height={303} 
                 priority
-                className="h-40 md:h-48 w-auto"
+                className="h-60 md:h-72 w-auto"
               />
             </a>
             <div className="flex items-center gap-3">

@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
-import {
-  EmailConfigError,
-  sendTransactionalEmail,
-} from '@/lib/email/mailer';
+import { Resend } from 'resend';
+import { generateWaitlistEmail } from '@/lib/emails/waitlist-email';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
@@ -12,6 +10,8 @@ const supabase: SupabaseClient | null =
   supabaseUrl && supabaseAnonKey
     ? createClient(supabaseUrl, supabaseAnonKey)
     : null;
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Email validation regex
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -109,33 +109,22 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Send waitlist welcome email
     let emailSent = false;
     let emailError: string | undefined;
     try {
-      await sendTransactionalEmail({
+      const emailHtml = generateWaitlistEmail({ email: trimmedEmail });
+      await resend.emails.send({
+        from: 'EVZAIN <hello@evzain.com>',
         to: trimmedEmail,
-        type: 'waitlist_welcome',
-        data: { source: source || 'homepage' },
+        subject: 'Welcome to EVZAIN - Take Your Athlete Assessment',
+        html: emailHtml,
       });
       emailSent = true;
     } catch (err) {
-      if (err instanceof EmailConfigError) {
-        console.warn('Resend not configured; skipping welcome email');
-        emailError = err.message;
-      } else {
-        console.error('Failed to send waitlist welcome email:', err);
-        emailError = err instanceof Error ? err.message : 'Unknown email error';
-      }
+      console.error('Failed to send waitlist welcome email:', err);
+      emailError = err instanceof Error ? err.message : 'Unknown email error';
     }
-
-    // TODO: Trigger welcome email via /api/send-email
-    // await fetch('/api/send-email', {
-    //   method: 'POST',
-    //   body: JSON.stringify({
-    //     to: trimmedEmail,
-    //     type: 'waitlist_welcome'
-    //   })
-    // });
 
     return NextResponse.json({
       success: true,

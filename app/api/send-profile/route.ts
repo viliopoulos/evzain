@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { Resend } from 'resend';
+import { generateProfileEmail } from '@/lib/emails/profile-email';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: NextRequest) {
   try {
@@ -42,12 +46,32 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // TODO: Add email sending later
-    // For now, data is stored in Supabase
+    // Send profile email
+    try {
+      const emailHtml = generateProfileEmail({
+        name,
+        sport: assessmentData?.sport || 'Your Sport',
+        level: assessmentData?.level || 'Intermediate',
+        goals: assessmentData?.goals || ['Performance Improvement'],
+        trainingHours: assessmentData?.training_hours || '5-10 hours',
+        frustrations: assessmentData?.frustrations || [],
+        progressTracking: assessmentData?.progress_tracking || 'Manual tracking',
+      });
+
+      await resend.emails.send({
+        from: 'EVZAIN <hello@evzain.com>',
+        to: email,
+        subject: `${name}, Your EVZAIN Athlete Profile is Ready`,
+        html: emailHtml,
+      });
+    } catch (emailError) {
+      console.error('Email send error:', emailError);
+      // Don't fail the request if email fails
+    }
     
     return NextResponse.json({ 
       success: true,
-      message: 'Profile request received. We\'ll be in touch soon!' 
+      message: 'Profile sent to your email!' 
     });
   } catch (error) {
     console.error('Error in send-profile:', error);
